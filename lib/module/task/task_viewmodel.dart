@@ -6,6 +6,13 @@ import 'package:qinglong_app/module/task/task_bean.dart';
 import 'package:qinglong_app/utils/extension.dart';
 
 var taskProvider = ChangeNotifierProvider((ref) => TaskViewModel());
+Map<int, int> sort = {
+  0: 0,
+  5: 1,
+  3: 2,
+  1: 3,
+  4: 4,
+};
 
 class TaskViewModel extends BaseViewModel {
   List<TaskBean> list = [];
@@ -33,17 +40,17 @@ class TaskViewModel extends BaseViewModel {
   }
 
   void sortList() {
-    for (int i = 0; i < list.length; i++) {
-      if (list[i].isPinned == 1) {
-        final TaskBean item = list.removeAt(i);
-        list.insert(0, item);
-      }
-    }
+    list.sort((TaskBean a, TaskBean b) {
+      int? sortA = (a.isPinned == 1 && a.status != 0) ? 5 : ((a.isDisabled == 1 && a.status != 0) ? 4 : a.status);
+      int? sortB = (b.isPinned == 1 && b.status != 0) ? 5 : ((b.isDisabled == 1 && b.status != 0) ? 4 : b.status);
+
+      return sort[sortA!]! - sort[sortB!]!;
+    });
 
     running.clear();
     running.addAll(list.where((element) => element.status == 0));
     neverRunning.clear();
-    neverRunning.addAll(list.where((element) => element.lastRunningTime == null ));
+    neverRunning.addAll(list.where((element) => element.lastRunningTime == null));
     notScripts.clear();
     notScripts.addAll(list.where((element) => (element.command != null && (element.command!.startsWith("ql repo") || element.command!.startsWith("ql raw")))));
     disabled.clear();
