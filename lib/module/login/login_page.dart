@@ -3,16 +3,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:qinglong_app/base/http/api.dart';
 import 'package:qinglong_app/base/http/http.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/base/theme.dart';
 import 'package:qinglong_app/base/userinfo_viewmodel.dart';
 import 'package:qinglong_app/main.dart';
-import 'package:qinglong_app/module/login/user_bean.dart';
 import 'package:qinglong_app/utils/extension.dart';
 import 'package:qinglong_app/utils/login_helper.dart';
-import 'package:qinglong_app/utils/update_utils.dart';
 import 'package:qinglong_app/utils/utils.dart';
 import 'package:flip_card/flip_card.dart';
 
@@ -66,7 +63,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
     getIt<UserInfoViewModel>().updateToken("");
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      update();
       if (useSecretLogin) {
         cardKey.currentState?.toggleCard();
       }
@@ -520,16 +516,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         setState(() {});
       }
     });
-  }
-
-  void update() async {
-    String? result = await UpdateUtils().checkUpdate();
-    if (result != null && result.isNotEmpty) {
-      UpdateDialog updateDialog = UpdateDialog(context, title: "发现新版本", updateContent: "版本号:v${result}", onUpdate: () {
-        UpdateUtils.launchURL(result);
-      });
-      updateDialog.show();
-    }
   }
 
   Widget buildCell(UserInfoBean bean) {

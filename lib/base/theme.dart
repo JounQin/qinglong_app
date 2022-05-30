@@ -10,7 +10,7 @@ import 'package:qinglong_app/utils/sp_utils.dart';
 
 var themeProvider = ChangeNotifierProvider((ref) => ThemeViewModel());
 
-const commonColor = Color(0xFF299343);
+Color commonColor = const Color(0xFF299343);
 Color _primaryColor = commonColor;
 
 class ThemeViewModel extends ChangeNotifier {
@@ -71,7 +71,10 @@ class ThemeViewModel extends ChangeNotifier {
       ),
       scaffoldBackgroundColor: const Color(0xfff5f5f5),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(color: _primaryColor),
+        labelStyle: TextStyle(
+          color: _primaryColor,
+          fontSize: 14,
+        ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: _primaryColor,
@@ -152,7 +155,10 @@ class ThemeViewModel extends ChangeNotifier {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        labelStyle: TextStyle(color: _primaryColor),
+        labelStyle: TextStyle(
+          color: _primaryColor,
+          fontSize: 14,
+        ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: _primaryColor,
@@ -208,11 +214,14 @@ class ThemeViewModel extends ChangeNotifier {
 
 abstract class ThemeColors {
   Color settingBgColor();
+
   Color settingBordorColor();
 
   Color titleColor();
 
   Color descColor();
+
+  Color tabBarColor();
 
   Color pinColor();
 
@@ -256,6 +265,11 @@ class LightThemeColors extends ThemeColors {
   Color settingBordorColor() {
     return Colors.white;
   }
+
+  @override
+  Color tabBarColor() {
+    return const Color(0xffF7F7F7);
+  }
 }
 
 class DartThemeColors extends ThemeColors {
@@ -292,5 +306,10 @@ class DartThemeColors extends ThemeColors {
   @override
   Color settingBordorColor() {
     return Color(0xff333333);
+  }
+
+  @override
+  Color tabBarColor() {
+    return Colors.black;
   }
 }

@@ -11,6 +11,8 @@ class TaskBean {
   String? schedule;
   bool? saved;
   String? sId;
+  int? id;
+  String? _id;
   int? created;
   int? status;
   String? timestamp;
@@ -24,20 +26,22 @@ class TaskBean {
 
   TaskBean(
       {this.name,
-      this.command,
-      this.schedule,
-      this.saved,
-      this.sId,
-      this.created,
-      this.status,
-      this.timestamp,
-      this.isSystem,
-      this.isDisabled,
-      this.logPath,
-      this.isPinned,
-      this.lastExecutionTime,
-      this.lastRunningTime,
-      this.pid});
+        this.command,
+        this.schedule,
+        this.saved,
+        this.sId,
+        this.created,
+        this.status,
+        this.timestamp,
+        this.isSystem,
+        this.isDisabled,
+        this.logPath,
+        this.isPinned,
+        this.lastExecutionTime,
+        this.lastRunningTime,
+        this.pid});
+
+  get nId => _id;
 
   TaskBean.fromJson(Map<String, dynamic> json) {
     try {
@@ -45,6 +49,8 @@ class TaskBean {
       command = json['command'].toString();
       schedule = json['schedule'].toString();
       saved = json['saved'];
+      id = json['id'];
+      _id = json['_id'];
       sId = json.containsKey('_id') ? json['_id'].toString() : (json.containsKey('id') ? json['id'].toString() : "");
       created = int.tryParse(json['created'].toString());
       status = json['status'];

@@ -105,7 +105,8 @@ class Routes {
       case routeTaskLogDetail:
         return CupertinoPageRoute(
           builder: (context) => TaskLogDetailPage(
-            title: settings.arguments as String,
+            title: (settings.arguments as Map)['title'],
+            path: (settings.arguments as Map)['path'],
           ),
         );
       case routeScriptDetail:

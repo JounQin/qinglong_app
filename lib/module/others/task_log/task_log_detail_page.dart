@@ -12,10 +12,12 @@ import 'package:qinglong_app/utils/extension.dart';
 /// @author NewTab
 class TaskLogDetailPage extends ConsumerStatefulWidget {
   final String title;
+  final String path;
 
   const TaskLogDetailPage({
     Key? key,
     required this.title,
+    required this.path,
   }) : super(key: key);
 
   @override
@@ -38,21 +40,22 @@ class _TaskLogDetailPageState extends ConsumerState<TaskLogDetailPage> with Lazy
       body: content == null
           ? const Center(child: CupertinoActivityIndicator())
           : Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-              ),
-              child: SelectableText(
-                (content == null || content!.isEmpty) ? "暂无数据" : content!,
-                selectionHeightStyle: BoxHeightStyle.max,
-                selectionWidthStyle: BoxWidthStyle.max,
-              ),
-            ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15,
+        ),
+        child: SelectableText(
+          (content == null || content!.isEmpty) ? "暂无数据" : content!,
+          selectionHeightStyle: BoxHeightStyle.max,
+          selectionWidthStyle: BoxWidthStyle.max,
+        ),
+      ),
     );
   }
 
   Future<void> loadData() async {
     HttpResponse<String> response = await Api.taskLogDetail(
       widget.title,
+      widget.path,
     );
 
     if (response.success) {

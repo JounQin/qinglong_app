@@ -187,7 +187,7 @@ class _AddEnvPageState extends ConsumerState<AddEnvPage> {
     envBean.remarks = _remarkController.text;
     HttpResponse<NullResponse> response = await Api.addEnv(
         _nameController.text, _valueController.text, _remarkController.text,
-        id: envBean.sId);
+        id: envBean.id,nId: envBean.nId,);
 
     if (response.success) {
       (envBean.sId == null) ? "新增成功" : "修改成功".toast();

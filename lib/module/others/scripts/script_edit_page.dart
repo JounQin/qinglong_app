@@ -2,6 +2,11 @@ import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:highlight/languages/javascript.dart';
+import 'package:highlight/languages/json.dart';
+import 'package:highlight/languages/powershell.dart';
+import 'package:highlight/languages/python.dart';
+import 'package:highlight/languages/vbscript-html.dart';
+import 'package:highlight/languages/yaml.dart';
 import 'package:qinglong_app/base/http/api.dart';
 import 'package:qinglong_app/base/http/http.dart';
 import 'package:qinglong_app/base/ql_app_bar.dart';
@@ -41,11 +46,32 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
     });
   }
 
+  getLanguageType(String title) {
+    if (title.endsWith(".js")) {
+      return javascript;
+    }
+
+    if (title.endsWith(".sh")) {
+      return powershell;
+    }
+
+    if (title.endsWith(".py")) {
+      return python;
+    }
+    if (title.endsWith(".json")) {
+      return json;
+    }
+    if (title.endsWith(".yaml")) {
+      return yaml;
+    }
+    return vbscriptHtml;
+  }
+
   @override
   Widget build(BuildContext context) {
     _codeController ??= CodeController(
       text: widget.content,
-      language: javascript,
+      language: getLanguageType(widget.title),
       onChange: (value) {
         result = value;
       },
@@ -91,10 +117,24 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
       ),
       body: SafeArea(
         top: false,
-        child: CodeField(
-          controller: _codeController!,
-          expands: true,
-          background: ref.watch(themeProvider).themeColor.settingBgColor(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 10,
+            vertical: 10,
+          ),
+          child: CodeField(
+            controller: _codeController!,
+            expands: true,
+            wrap: true,
+            lineNumberStyle: LineNumberStyle(
+              width: 0,
+              margin: 0,
+              textStyle: TextStyle(
+                color: ref.watch(themeProvider).themeColor.descColor(),
+              ),
+            ),
+            background: ref.watch(themeProvider).themeColor.tabBarColor(),
+          ),
         ),
       ),
     );

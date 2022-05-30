@@ -4,6 +4,8 @@ import 'package:json_conversion_annotation/json_conversion_annotation.dart';
 class EnvBean {
   String? value;
   String? sId;
+  String? _id;
+  int? id;
   int? created;
   int? status;
   String? timestamp;
@@ -12,8 +14,12 @@ class EnvBean {
 
   EnvBean({this.value, this.sId, this.created, this.status, this.timestamp, this.name, this.remarks});
 
+  get nId => _id;
+
   EnvBean.fromJson(Map<String, dynamic> json) {
     value = json['value'];
+    id = json['id'];
+    _id = json['_id'];
     sId = json.containsKey('_id') ? json['_id'].toString() : (json.containsKey('id') ? json['id'].toString() : "");
     created = int.tryParse(json['created'].toString());
     status = json['status'];

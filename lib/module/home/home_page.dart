@@ -8,11 +8,9 @@ import 'package:qinglong_app/base/ql_app_bar.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/module/config/config_page.dart';
 import 'package:qinglong_app/module/env/env_page.dart';
-import 'package:qinglong_app/module/home/system_bean.dart';
 import 'package:qinglong_app/module/others/other_page.dart';
 import 'package:qinglong_app/module/task/task_page.dart';
 import 'package:move_to_background/move_to_background.dart';
-import 'package:qinglong_app/utils/update_utils.dart';
 import 'dart:math' as math;
 
 import '../../utils/utils.dart';
@@ -47,7 +45,6 @@ class _HomePageState extends ConsumerState<HomePage>
     _title = titles[0].title;
     super.initState();
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      update();
       getSystemBean();
     });
   }
@@ -241,17 +238,6 @@ class _HomePageState extends ConsumerState<HomePage>
         celebrate: !isNewYear ? "" : "assets/images/le.png",
       ),
     );
-  }
-
-  void update() async {
-    String? result = await UpdateUtils().checkUpdate();
-    if (result != null && result.isNotEmpty) {
-      UpdateDialog updateDialog = UpdateDialog(context,
-          title: "发现新版本", updateContent: "版本号:v$result", onUpdate: () {
-        UpdateUtils.launchURL(result);
-      });
-      updateDialog.show();
-    }
   }
 
   void isNewYearDuration() {
