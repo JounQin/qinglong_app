@@ -43,40 +43,66 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
                   color: ref.watch(themeProvider).themeColor.settingBgColor(),
                   child: (item.isDir ?? false)
                       ? ExpansionTile(
-                          title: Text(
-                            item.name ?? "",
-                            style: TextStyle(
-                              color: ref.watch(themeProvider).themeColor.titleColor(),
-                              fontSize: 16,
-                            ),
-                          ),
-                          children: item.files!
-                              .map((e) => ListTile(
-                                    onTap: () {
-                                      Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: item.name! + "/" + e);
-                                    },
-                                    title: Text(
-                                      e,
-                                      style: TextStyle(
-                                        color: ref.watch(themeProvider).themeColor.titleColor(),
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ))
-                              .toList(),
-                        )
-                      : ListTile(
-                          onTap: () {
-                            Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: item.name);
-                          },
-                          title: Text(
-                            item.name ?? "",
-                            style: TextStyle(
-                              color: ref.watch(themeProvider).themeColor.titleColor(),
-                              fontSize: 16,
-                            ),
-                          ),
+                    title: Text(
+                      item.name ?? "",
+                      style: TextStyle(
+                        color: ref.watch(themeProvider).themeColor.titleColor(),
+                        fontSize: 16,
+                      ),
+                    ),
+                    children: (item.files?.isNotEmpty ?? false)
+                        ? item.files!
+                        .map((e) => ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
+                          "path": item.name,
+                          "title": e,
+                        });
+                      },
+                      title: Text(
+                        e,
+                        style: TextStyle(
+                          color: ref.watch(themeProvider).themeColor.titleColor(),
+                          fontSize: 14,
                         ),
+                      ),
+                    ))
+                        .toList()
+                        : (item.children ?? [])
+                        .map((e) => ListTile(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
+                          "path": item.name,
+                          "title": e.title,
+                        });
+                      },
+                      title: Text(
+                        e.title ?? "",
+                        style: TextStyle(
+                          color: ref.watch(themeProvider).themeColor.titleColor(),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ))
+                        .toList(),
+                  )
+                      : ListTile(
+                    onTap: () {
+                      if (item.isDir ?? false) {
+                        "该文件夹为空".toast();
+                        return;
+                      }
+
+                      Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: item.name);
+                    },
+                    title: Text(
+                      item.name ?? "",
+                      style: TextStyle(
+                        color: ref.watch(themeProvider).themeColor.titleColor(),
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 );
               },
               itemCount: list.length,

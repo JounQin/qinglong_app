@@ -125,15 +125,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       }
                                       WidgetsBinding.instance?.endOfFrame;
                                     },
-                                    child: ColorFiltered(
-                                      colorFilter: ColorFilter.mode(
-                                        ref.watch(themeProvider).primaryColor,
-                                        BlendMode.srcIn,
-                                      ),
-                                      child: Image.asset(
-                                        "assets/images/ql.png",
-                                        height: 45,
-                                      ),
+                                    child: Image.asset(
+                                      "assets/images/ql.png",
+                                      height: 45,
                                     ),
                                   ),
                                 ],

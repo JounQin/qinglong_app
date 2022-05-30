@@ -41,7 +41,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
       },
       model: taskProvider,
       onReady: (viewModel) {
-        viewModel.loadData(context);
+        viewModel.loadData();
       },
     );
   }

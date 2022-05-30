@@ -63,7 +63,7 @@ flutter:
   assets:
     - assets/images/
 flutter_app_name:
-  name: "青龙"
+  name: "青龙客户端"
 
 flutter_icons:
   image_path_android: "assets/images/ql.png"

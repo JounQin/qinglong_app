@@ -86,7 +86,7 @@ class _EnvPageState extends State<EnvPage> {
       },
       model: envProvider,
       onReady: (viewModel) {
-        viewModel.loadData(context);
+        viewModel.loadData();
       },
     );
   }

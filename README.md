@@ -44,3 +44,20 @@ iOS端暂无上架打算，用户自行下载main分支源码编译安装
 ### 不支持的功能
 >* 应用设置
 >* 通知设置
+
+
+版本更新通知 https://t.me/qinglongapp
+
+用于生成app的图标
+
+flutter pub run flutter_launcher_icons:main
+生成原生的启动页面
+
+flutter pub run flutter_native_splash:create
+修改app名称
+
+flutter pub run flutter_app_name
+
+生成json.jc.dart文件
+flutter pub run build_runner build --delete-conflicting-outputs
+
