@@ -15,6 +15,11 @@ Map<int, int> sort = {
 };
 
 class TaskViewModel extends BaseViewModel {
+  static const String allStr = "全部脚本";
+  static const String runningStr = "正在运行";
+  static const String neverStr = "从未运行";
+  static const String notScriptStr = "拉库脚本";
+  static const String disableStr = "禁用脚本";
   List<TaskBean> list = [];
   List<TaskBean> running = [];
   List<TaskBean> neverRunning = [];
@@ -41,11 +46,25 @@ class TaskViewModel extends BaseViewModel {
 
   void sortList() {
     list.sort((TaskBean a, TaskBean b) {
-      int? sortA = (a.isPinned == 1 && a.status != 0) ? 5 : ((a.isDisabled == 1 && a.status != 0) ? 4 : a.status);
-      int? sortB = (b.isPinned == 1 && b.status != 0) ? 5 : ((b.isDisabled == 1 && b.status != 0) ? 4 : b.status);
+      int? sortA = (a.isPinned == 1 && a.status != 0)
+          ? 5
+          : (a.isDisabled == 1 && a.status != 0)
+              ? 4
+              : a.status;
+      int? sortB = (b.isPinned == 1 && b.status != 0)
+          ? 5
+          : (b.isDisabled == 1 && b.status != 0)
+              ? 4
+              : b.status;
 
       return sort[sortA!]! - sort[sortB!]!;
     });
+
+    for (int i = 0; i < list.length; i++) {
+      if (list[i].isPinned == 1) {
+        list.insert(0, list.removeAt(i));
+      }
+    }
 
     running.clear();
     running.addAll(list.where((element) => element.status == 0));
@@ -60,9 +79,7 @@ class TaskViewModel extends BaseViewModel {
   Future<void> runCrons(String cron) async {
     HttpResponse<NullResponse> result = await Api.startTasks([cron]);
     if (result.success) {
-      list.firstWhere((element) => element.sId == cron).status = 0;
-      sortList();
-      notifyListeners();
+      loadData(false);
     } else {
       failToast(result.message, notify: true);
     }
@@ -71,9 +88,7 @@ class TaskViewModel extends BaseViewModel {
   Future<void> stopCrons(String cron) async {
     HttpResponse<NullResponse> result = await Api.stopTasks([cron]);
     if (result.success) {
-      list.firstWhere((element) => element.sId == cron).status = 1;
-      sortList();
-      notifyListeners();
+      loadData(false);
     } else {
       failToast(result.message, notify: true);
     }
@@ -82,9 +97,8 @@ class TaskViewModel extends BaseViewModel {
   Future<void> delCron(String id) async {
     HttpResponse<NullResponse> result = await Api.delTask(id);
     if (result.success) {
-      list.removeWhere((element) => element.sId == id);
       "删除成功".toast();
-      notifyListeners();
+      loadData(false);
     } else {
       failToast(result.message, notify: true);
     }
@@ -108,9 +122,7 @@ class TaskViewModel extends BaseViewModel {
 
       if (response.success) {
         "取消置顶成功".toast();
-        list.firstWhere((element) => element.sId == sId).isPinned = 0;
-        sortList();
-        success();
+        loadData(false);
       } else {
         failToast(response.message, notify: true);
       }
@@ -119,9 +131,7 @@ class TaskViewModel extends BaseViewModel {
 
       if (response.success) {
         "置顶成功".toast();
-        list.firstWhere((element) => element.sId == sId).isPinned = 1;
-        sortList();
-        success();
+        loadData(false);
       } else {
         failToast(response.message, notify: true);
       }
@@ -134,9 +144,7 @@ class TaskViewModel extends BaseViewModel {
 
       if (response.success) {
         "禁用成功".toast();
-        list.firstWhere((element) => element.sId == sId).isDisabled = 1;
-        sortList();
-        success();
+        loadData(false);
       } else {
         failToast(response.message, notify: true);
       }
@@ -145,9 +153,7 @@ class TaskViewModel extends BaseViewModel {
 
       if (response.success) {
         "启用成功".toast();
-        list.firstWhere((element) => element.sId == sId).isDisabled = 0;
-        sortList();
-        success();
+        loadData(false);
       } else {
         failToast(response.message, notify: true);
       }
