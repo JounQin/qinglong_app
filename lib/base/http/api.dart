@@ -1,4 +1,6 @@
 import 'package:qinglong_app/base/http/http.dart';
+import 'package:qinglong_app/base/http/url.dart';
+import 'package:qinglong_app/main.dart';
 import 'package:qinglong_app/module/config/config_bean.dart';
 import 'package:qinglong_app/module/env/env_bean.dart';
 import 'package:qinglong_app/module/home/system_bean.dart';
@@ -9,9 +11,7 @@ import 'package:qinglong_app/module/others/login_log/login_log_bean.dart';
 import 'package:qinglong_app/module/others/scripts/script_bean.dart';
 import 'package:qinglong_app/module/others/task_log/task_log_bean.dart';
 import 'package:qinglong_app/module/task/task_bean.dart';
-
-import '../../utils/utils.dart';
-import 'url.dart';
+import 'package:qinglong_app/utils/utils.dart';
 
 class Api {
   static Future<HttpResponse<SystemBean>> system() async {
@@ -89,24 +89,21 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> startTasks(
-      List<String> crons) async {
+  static Future<HttpResponse<NullResponse>> startTasks(List<String> crons) async {
     return await Http.put<NullResponse>(
       Url.runTasks,
       crons,
     );
   }
 
-  static Future<HttpResponse<NullResponse>> stopTasks(
-      List<String> crons) async {
+  static Future<HttpResponse<NullResponse>> stopTasks(List<String> crons) async {
     return await Http.put<NullResponse>(
       Url.stopTasks,
       crons,
     );
   }
 
-  static Future<HttpResponse<NullResponse>> updatePassword(
-      String name, String password) async {
+  static Future<HttpResponse<NullResponse>> updatePassword(String name, String password) async {
     return await Http.put<NullResponse>(
       Url.updatePassword,
       {
@@ -124,15 +121,19 @@ class Api {
   }
 
   static Future<HttpResponse<NullResponse>> addTask(
-      String name, String command, String cron,
-      {String? id}) async {
-    var data = {"name": name, "command": command, "schedule": cron};
+    String name,
+    String command,
+    String cron, {
+    int? id,
+    String? nId,
+  }) async {
+    var data = <String, dynamic>{"name": name, "command": command, "schedule": cron};
 
-    if (id != null) {
-      if (Utils.isUpperVersion()) {
+    if (id != null || nId != null) {
+      if (id != null) {
         data["id"] = id;
-      } else {
-        data["_id"] = id;
+      } else if (nId != null) {
+        data["_id"] = nId;
       }
       return await Http.put<NullResponse>(
         Url.addTask,
@@ -194,8 +195,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> saveFile(
-      String name, String content) async {
+  static Future<HttpResponse<NullResponse>> saveFile(String name, String content) async {
     return await Http.post<NullResponse>(
       Url.saveFile,
       {"content": content, "name": name},
@@ -231,21 +231,24 @@ class Api {
   }
 
   static Future<HttpResponse<NullResponse>> addEnv(
-      String name, String value, String remarks,
-      {String? id}) async {
-    var data = {
+    String name,
+    String value,
+    String remarks, {
+    int? id,
+    String? nId,
+  }) async {
+    var data = <String, dynamic>{
       "value": value,
       "remarks": remarks,
       "name": name,
     };
 
-    if (id != null) {
-      if (Utils.isUpperVersion()) {
+    if (id != null || nId != null) {
+      if (id != null) {
         data["id"] = id;
-      } else {
-        data["_id"] = id;
+      } else if (nId != null) {
+        data["_id"] = nId;
       }
-
       return await Http.put<NullResponse>(
         Url.addEnv,
         data,
@@ -257,8 +260,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> moveEnv(
-      String id, int fromIndex, int toIndex) async {
+  static Future<HttpResponse<NullResponse>> moveEnv(String id, int fromIndex, int toIndex) async {
     return await Http.put<NullResponse>(
       Url.envMove(id),
       {"fromIndex": fromIndex, "toIndex": toIndex},
@@ -273,26 +275,32 @@ class Api {
   }
 
   static Future<HttpResponse<List<TaskLogBean>>> taskLog() async {
-    return await Http.get<List<TaskLogBean>>(Url.taskLog, null,
-        serializationName: "dirs");
+    return await Http.get<List<TaskLogBean>>(Url.taskLog, null, serializationName: Utils.isUpperVersion2_12_2() ? "data" : "dirs");
   }
 
-  static Future<HttpResponse<String>> taskLogDetail(String name) async {
-    return await Http.get<String>(
-      Url.taskLogDetail + name,
-      null,
-    );
+  static Future<HttpResponse<String>> taskLogDetail(String name, String path) async {
+    if (Utils.isUpperVersion2_13_0()) {
+      return await Http.get<String>(
+        Url.taskLogDetail + name + "?path=" + path,
+        null,
+      );
+    } else {
+      return await Http.get<String>(
+        Url.taskLogDetail + path + "/" + name,
+        null,
+      );
+    }
   }
 
   static Future<HttpResponse<List<ScriptBean>>> scripts() async {
+    //2.12.2以及以上版本,脚本路径url做了修改
     return await Http.get<List<ScriptBean>>(
-      Url.scripts,
+      Utils.isUpperVersion2_13_0() ? Url.scripts2 : Url.scripts,
       null,
     );
   }
 
-  static Future<HttpResponse<NullResponse>> updateScript(
-      String name, String path, String content) async {
+  static Future<HttpResponse<NullResponse>> updateScript(String name, String path, String content) async {
     return await Http.put<NullResponse>(
       Url.scriptDetail,
       {
@@ -303,8 +311,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> delScript(
-      String name, String path) async {
+  static Future<HttpResponse<NullResponse>> delScript(String name, String path) async {
     return await Http.delete<NullResponse>(
       Url.scriptDetail,
       {
@@ -314,8 +321,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<String>> scriptDetail(
-      String name, String? path) async {
+  static Future<HttpResponse<String>> scriptDetail(String name, String? path) async {
     return await Http.get<String>(
       Url.scriptDetail + name,
       {
@@ -324,8 +330,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<List<DependencyBean>>> dependencies(
-      String type) async {
+  static Future<HttpResponse<List<DependencyBean>>> dependencies(String type) async {
     return await Http.get<List<DependencyBean>>(
       Url.dependencies,
       {
@@ -334,8 +339,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> dependencyReinstall(
-      String id) async {
+  static Future<HttpResponse<NullResponse>> dependencyReinstall(String id) async {
     return await Http.put<NullResponse>(
       Url.dependencies,
       [id],
@@ -349,8 +353,7 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> addDependency(
-      String name, int type) async {
+  static Future<HttpResponse<NullResponse>> addDependency(String name, int type) async {
     return await Http.post<NullResponse>(
       Url.dependencies,
       [
@@ -359,6 +362,17 @@ class Api {
           "type": type,
         }
       ],
+    );
+  }
+
+  static Future<HttpResponse<NullResponse>> addScript(String name, String path, String content) async {
+    return await Http.post<NullResponse>(
+      Url.addScript,
+      {
+        "filename": name,
+        "path": path,
+        "content": content,
+      },
     );
   }
 

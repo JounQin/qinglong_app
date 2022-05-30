@@ -7,32 +7,14 @@ class Utils {
   static final SystemBean systemBean = SystemBean();
 
   static bool isUpperVersion() {
-    try {
-      List<String>? version = Utils.systemBean.version?.split("\.");
+    return systemBean.isUpperVersion();
+  }
+  static bool isUpperVersion2_12_2() {
+    return systemBean.isUpperVersion2_12_2();
+  }
 
-      String f = version?[0] ?? "2";
-      String s = version?[1] ?? "10";
-      String t = version?[2] ?? "0";
-
-      int first = int.parse(f);
-      int second = int.parse(s);
-      int third = int.parse(t);
-
-      /// 2.10.13 及以下版本
-
-      if (first > 2) {
-        return true;
-      }
-      if (second > 10) {
-        return true;
-      }
-      if (third > 13) {
-        return true;
-      }
-      return false;
-    } catch (e) {
-      return false;
-    }
+  static bool isUpperVersion2_13_0() {
+    return systemBean.isUpperVersion2_13_0();
   }
 
   static void hideKeyBoard(BuildContext context) {

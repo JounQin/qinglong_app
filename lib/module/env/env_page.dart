@@ -24,6 +24,14 @@ class _EnvPageState extends State<EnvPage> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseStateWidget<EnvViewModel>(
       builder: (ref, model, child) {
@@ -37,7 +45,7 @@ class _EnvPageState extends State<EnvPage> {
               (value.remarks?.contains(_searchController.text) ?? false)) {
             list.add(EnvItemCell(
               value,
-              i + 1,
+              i,
               ref,
               key: ValueKey(value.sId),
             ));
@@ -51,32 +59,34 @@ class _EnvPageState extends State<EnvPage> {
                 onRefresh: () async {
                   return model.loadData(false);
                 },
-                child: ReorderableListView(
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                  header: searchCell(ref),
-                  onReorder: (int oldIndex, int newIndex) {
-                    if (list.length != model.list.length) {
-                      "请先清空搜索关键词".toast();
-                      return;
-                    }
-
-                    setState(() {
-                      //交换数据
-                      if (newIndex > oldIndex) {
-                        newIndex -= 1;
+                child: SlidableAutoCloseBehavior(
+                  child: ReorderableListView(
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    header: searchCell(ref),
+                    onReorder: (int oldIndex, int newIndex) {
+                      if (list.length != model.list.length) {
+                        "请先清空搜索关键词".toast();
+                        return;
                       }
-                      final EnvBean item = model.list.removeAt(oldIndex);
-                      model.list.insert(newIndex, item);
-                      model.update(item.sId ?? "", newIndex, oldIndex);
-                    });
-                  },
-                  children: list,
+
+                      setState(() {
+                        //交换数据
+                        if (newIndex > oldIndex) {
+                          newIndex -= 1;
+                        }
+                        final EnvBean item = model.list.removeAt(oldIndex);
+                        model.list.insert(newIndex, item);
+                        model.update(item.sId ?? "", newIndex, oldIndex);
+                      });
+                    },
+                    children: list,
+                  ),
                 ),
               );
       },
       model: envProvider,
       onReady: (viewModel) {
-        viewModel.loadData();
+        viewModel.loadData(context);
       },
     );
   }
@@ -133,185 +143,181 @@ class EnvItemCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).pushNamed(Routes.routeEnvDetail, arguments: bean);
-      },
-      child: ColoredBox(
-        color: ref.watch(themeProvider).themeColor.settingBgColor(),
-        child: Slidable(
-          key: ValueKey(bean.sId),
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            extentRatio: 0.45,
+    return ColoredBox(
+      color: ref.watch(themeProvider).themeColor.settingBgColor(),
+      child: Slidable(
+        key: ValueKey(bean.sId),
+        endActionPane: ActionPane(
+          motion: const StretchMotion(),
+          extentRatio: 0.5,
+          children: [
+            SlidableAction(
+              backgroundColor: const Color(0xff5D5E70),
+              onPressed: (_) {
+                Navigator.of(context).pushNamed(Routes.routeAddEnv, arguments: bean);
+              },
+              foregroundColor: Colors.white,
+              icon: CupertinoIcons.pencil_outline,
+            ),
+            SlidableAction(
+              backgroundColor: const Color(0xffA356D6),
+              onPressed: (_) {
+                enableEnv(context);
+              },
+              foregroundColor: Colors.white,
+              icon: bean.status == 0 ? Icons.dnd_forwardslash : Icons.check_circle_outline_sharp,
+            ),
+            SlidableAction(
+              backgroundColor: const Color(0xffEA4D3E),
+              onPressed: (_) {
+                delEnv(context, ref);
+              },
+              foregroundColor: Colors.white,
+              icon: CupertinoIcons.delete,
+            ),
+          ],
+        ),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SlidableAction(
-                backgroundColor: Colors.grey,
-                flex: 1,
-                onPressed: (_) {
-                  Navigator.of(context).pushNamed(Routes.routeAddEnv, arguments: bean);
-                },
-                foregroundColor: Colors.white,
-                icon: CupertinoIcons.pencil_outline,
-              ),
-              SlidableAction(
-                backgroundColor: Colors.orange,
-                flex: 1,
-                onPressed: (_) {
-                  enableEnv();
-                },
-                foregroundColor: Colors.white,
-                icon: bean.status == 0 ? Icons.dnd_forwardslash : Icons.check_circle_outline_sharp,
-              ),
-              SlidableAction(
-                backgroundColor: Colors.red,
-                flex: 1,
-                onPressed: (_) {
-                  delEnv(context, ref);
-                },
-                foregroundColor: Colors.white,
-                icon: CupertinoIcons.delete,
-              ),
-            ],
-          ),
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Material(
-                                  color: Colors.transparent,
-                                  child: Text(
-                                    bean.name ?? "",
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      color: ref.watch(themeProvider).themeColor.titleColor(),
-                                      fontSize: 18,
+              Material(
+                color: ref.watch(themeProvider).themeColor.settingBgColor(),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(Routes.routeEnvDetail, arguments: bean);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 8,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  bean.status == 1
+                                      ? const Icon(
+                                          Icons.dnd_forwardslash,
+                                          size: 18,
+                                          color: Color(0xffEA4D3E),
+                                        )
+                                      : Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 5,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: Border.all(color: ref.watch(themeProvider).primaryColor, width: 1),
+                                          ),
+                                          child: Text(
+                                            "${getIndexByIndex(context, index)}",
+                                            style: TextStyle(color: ref.watch(themeProvider).primaryColor, fontSize: 12),
+                                          ),
+                                        ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      bean.name ?? "",
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        overflow: TextOverflow.ellipsis,
+                                        color: ref.watch(themeProvider).themeColor.titleColor(),
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 5,
-                          ),
-                          Material(
-                            color: Colors.transparent,
-                            child: Text(
-                              Utils.formatGMTTime(bean.timestamp ?? ""),
-                              maxLines: 1,
-                              style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                color: ref.watch(themeProvider).themeColor.descColor(),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 5,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(color: ref.watch(themeProvider).primaryColor, width: 1),
-                              ),
-                              child: Text(
-                                "$index",
-                                style: TextStyle(color: ref.watch(themeProvider).primaryColor, fontSize: 12),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                    child: Visibility(
+                                      visible: bean.remarks != null && bean.remarks!.isNotEmpty,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: Text(
+                                          "(${bean.remarks})",
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            height: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            color: ref.watch(themeProvider).themeColor.descColor(),
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                             const SizedBox(
-                              width: 5,
-                            ),
-                            bean.status == 1
-                                ? const Icon(
-                              Icons.dnd_forwardslash,
-                              size: 12,
-                              color: Colors.red,
-                            )
-                                : const SizedBox.shrink(),
-
-                            const SizedBox(
-                              width: 5,
+                              width: 15,
                             ),
                             Material(
                               color: Colors.transparent,
                               child: Text(
-                                bean.remarks ?? "-",
+                                Utils.formatGMTTime(bean.timestamp ?? ""),
                                 maxLines: 1,
                                 style: TextStyle(
-                                  height: 1,
                                   overflow: TextOverflow.ellipsis,
                                   color: ref.watch(themeProvider).themeColor.descColor(),
                                   fontSize: 12,
                                 ),
                               ),
                             ),
-                            const Spacer(),
                           ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Material(
-                        color: Colors.transparent,
-                        child: Text(
-                          bean.value ?? "",
-                          maxLines: 1,
-                          style: TextStyle(
-                            overflow: TextOverflow.ellipsis,
-                            color: ref.watch(themeProvider).themeColor.descColor(),
-                            fontSize: 12,
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Material(
+                          color: Colors.transparent,
+                          child: Text(
+                            bean.value ?? "",
+                            maxLines: 1,
+                            style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: ref.watch(themeProvider).themeColor.descColor(),
+                              fontSize: 12,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-                const Divider(
-                  height: 1,
-                  indent: 15,
-                ),
-              ],
-            ),
+              ),
+              const Divider(
+                height: 1,
+                indent: 15,
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  void enableEnv() {
+  void enableEnv(BuildContext context) {
     ref.read(envProvider).enableEnv(bean.sId!, bean.status!);
   }
 
   void delEnv(BuildContext context, WidgetRef ref) {
     showCupertinoDialog(
+      useRootNavigator: false,
       context: context,
       builder: (context) => CupertinoAlertDialog(
         title: const Text("确认删除"),
@@ -343,5 +349,18 @@ class EnvItemCell extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  int getIndexByIndex(BuildContext context, int index) {
+    var list = ref.watch(envProvider.notifier).list;
+    int result = 0;
+
+    for (int i = 0; i <= index; i++) {
+      if (list.length > index && list[i].status == 0) {
+        result++;
+      }
+    }
+
+    return result;
   }
 }
