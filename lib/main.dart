@@ -26,6 +26,12 @@ void main() async {
   await SpUtil.getInstance();
   getIt.registerSingleton<UserInfoViewModel>(UserInfoViewModel());
 
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
   runApp(
     ProviderScope(
       overrides: [
