@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="青龙"
+        android:label="青龙客户端"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
