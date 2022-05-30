@@ -7,7 +7,6 @@ import 'package:qinglong_app/module/env/env_detail_page.dart';
 import 'package:qinglong_app/module/home/home_page.dart';
 import 'package:qinglong_app/module/login/login_page.dart';
 import 'package:qinglong_app/module/others/about_page.dart';
-import 'package:qinglong_app/module/others/change_account_page.dart';
 import 'package:qinglong_app/module/others/dependencies/add_dependency_page.dart';
 import 'package:qinglong_app/module/others/dependencies/dependency_page.dart';
 import 'package:qinglong_app/module/others/login_log/login_log_page.dart';
@@ -42,7 +41,6 @@ class Routes {
   static const String routeUpdatePassword = "/updatePassword";
   static const String routeAbout = "/about";
   static const String routeTheme = "/theme";
-  static const String routeChangeAccount = "/changeAccount";
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -139,10 +137,6 @@ class Routes {
       case routeTheme:
         return CupertinoPageRoute(
           builder: (context) => const ThemePage(),
-        );
-      case routeChangeAccount:
-        return CupertinoPageRoute(
-          builder: (context) => const ChangeAccountPage(),
         );
       case routeScriptUpdate:
         return CupertinoPageRoute(

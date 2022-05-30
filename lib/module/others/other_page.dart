@@ -307,41 +307,6 @@ class _OtherPageState extends ConsumerState<OtherPage> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () {
-                    Navigator.of(context).pushNamed(Routes.routeChangeAccount);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                      top: 5,
-                      bottom: 5,
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "切换账号",
-                          style: TextStyle(
-                            color: ref.watch(themeProvider).themeColor.titleColor(),
-                            fontSize: 16,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Icon(
-                          CupertinoIcons.right_chevron,
-                          size: 16,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Divider(
-                  indent: 15,
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
                     Navigator.of(context).pushNamed(
                       Routes.routeAbout,
                     );
