@@ -74,111 +74,113 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
           )
         ],
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    "名称:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextField(
+                    focusNode: focusNode,
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      hintText: "请输入名称",
+                    ),
+                    autofocus: false,
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  "名称:",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 15,
                   ),
-                ),
-                TextField(
-                  focusNode: focusNode,
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    hintText: "请输入名称",
+                  const Text(
+                    "命令:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  autofocus: false,
-                ),
-              ],
+                  TextField(
+                    controller: _commandController,
+                    maxLines: 4,
+                    minLines: 1,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      hintText: "请输入命令",
+                    ),
+                    autofocus: false,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const Text(
+                    "定时:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  TextField(
+                    controller: _cronController,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                      hintText: "请输入定时",
+                    ),
+                    autofocus: false,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const Text(
+                    "定时的cron不校验是否正确",
+                    style: TextStyle(
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  "命令:",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                TextField(
-                  controller: _commandController,
-                  maxLines: 4,
-                  minLines: 1,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    hintText: "请输入命令",
-                  ),
-                  autofocus: false,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                const Text(
-                  "定时:",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                TextField(
-                  controller: _cronController,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    hintText: "请输入定时",
-                  ),
-                  autofocus: false,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                const Text(
-                  "定时的cron不校验是否正确",
-                  style: TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

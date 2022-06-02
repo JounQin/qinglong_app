@@ -95,7 +95,7 @@ class UserInfoViewModel {
 
     historyAccounts.insert(0, UserInfoBean(userName: _userName, password: _passWord, useSecretLogined: _useSecertLogined, host: _host));
 
-    while (historyAccounts.length > 5) {
+    while (historyAccounts.length > 3) {
       historyAccounts.removeLast();
     }
 

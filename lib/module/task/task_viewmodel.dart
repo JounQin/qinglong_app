@@ -6,13 +6,6 @@ import 'package:qinglong_app/module/task/task_bean.dart';
 import 'package:qinglong_app/utils/extension.dart';
 
 var taskProvider = ChangeNotifierProvider((ref) => TaskViewModel());
-Map<int, int> sort = {
-  0: 0,
-  5: 1,
-  3: 2,
-  1: 3,
-  4: 4,
-};
 
 class TaskViewModel extends BaseViewModel {
   static const String allStr = "全部脚本";
@@ -45,26 +38,80 @@ class TaskViewModel extends BaseViewModel {
   }
 
   void sortList() {
-    list.sort((TaskBean a, TaskBean b) {
-      int? sortA = (a.isPinned == 1 && a.status != 0)
-          ? 5
-          : (a.isDisabled == 1 && a.status != 0)
-              ? 4
-              : a.status;
-      int? sortB = (b.isPinned == 1 && b.status != 0)
-          ? 5
-          : (b.isDisabled == 1 && b.status != 0)
-              ? 4
-              : b.status;
-
-      return sort[sortA!]! - sort[sortB!]!;
-    });
+    List<TaskBean> p = [];
+    List<TaskBean> r = [];
+    List<TaskBean> d = [];
 
     for (int i = 0; i < list.length; i++) {
       if (list[i].isPinned == 1) {
-        list.insert(0, list.removeAt(i));
+        p.add(list.removeAt(i));
+        i--;
+        continue;
+      }
+
+      if (list[i].status == 0) {
+        r.add(list.removeAt(i));
+        i--;
+        continue;
+      }
+      if (list[i].isDisabled == 1) {
+        d.add(list.removeAt(i));
+        i--;
+        continue;
       }
     }
+
+    p.sort((TaskBean a, TaskBean b) {
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      if (c == true) {
+        return 1;
+      }
+      return -1;
+    });
+
+    p.sort((a, b) {
+      return (a.isDisabled ?? 0) - (b.isDisabled ?? 0);
+    });
+
+    p.sort((a, b) {
+      if (a.status == 0 && b.status == 0) {
+        bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+        if (c == true) {
+          return 1;
+        }
+        return -1;
+      } else {
+        return (a.status ?? 0) - (b.status ?? 0);
+      }
+    });
+
+    r.sort((a, b) {
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      if (c == true) {
+        return 1;
+      }
+      return -1;
+    });
+
+    d.sort((a, b) {
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      if (c == true) {
+        return 1;
+      }
+      return -1;
+    });
+
+    list.sort((a, b) {
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      if (c == true) {
+        return 1;
+      }
+      return -1;
+    });
+
+    list.insertAll(0, r);
+    list.insertAll(0, p);
+    list.addAll(d);
 
     running.clear();
     running.addAll(list.where((element) => element.status == 0));
