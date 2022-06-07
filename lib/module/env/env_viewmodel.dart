@@ -8,7 +8,13 @@ import 'package:qinglong_app/utils/extension.dart';
 var envProvider = ChangeNotifierProvider((ref) => EnvViewModel());
 
 class EnvViewModel extends BaseViewModel {
+  static const String allStr = "全部";
+  static const String disabledStr = "已禁用";
+  static const String enabledStr = "已启用";
   List<EnvBean> list = [];
+  List<EnvBean> disabledList = [];
+  List<EnvBean> enabledList = [];
+
 
   Future<void> loadData([isLoading = true]) async {
     if (isLoading) {
@@ -17,12 +23,19 @@ class EnvViewModel extends BaseViewModel {
 
     HttpResponse<List<EnvBean>> result = await Api.envs("");
 
+
     if (result.success && result.bean != null) {
       list.clear();
       list.addAll(result.bean!);
+      disabledList.clear();
+      disabledList.addAll(list.where((element) => element.status == 1).toList());
+      enabledList.clear();
+      enabledList.addAll(list.where((element) => element.status == 0).toList());
       success();
     } else {
       list.clear();
+      disabledList.clear();
+      enabledList.clear();
       failed(result.message, notify: true);
     }
   }
@@ -31,23 +44,14 @@ class EnvViewModel extends BaseViewModel {
     HttpResponse<NullResponse> result = await Api.delEnv(id);
     if (result.success) {
       "删除成功".toast();
-      list.removeWhere((element) => element.sId == id);
-      notifyListeners();
+      loadData(false);
     } else {
       failed(result.message, notify: true);
     }
   }
 
   void updateEnv(EnvBean result) {
-    if (result.sId == null) {
-      loadData(false);
-      return;
-    }
-    EnvBean bean = list.firstWhere((element) => element.sId == result.sId);
-    bean.name = result.name;
-    bean.remarks = result.remarks;
-    bean.value = result.value;
-    notifyListeners();
+    loadData(false);
   }
 
   Future<void> enableEnv(String sId, int status) async {
@@ -56,8 +60,7 @@ class EnvViewModel extends BaseViewModel {
 
       if (response.success) {
         "启用成功".toast();
-        list.firstWhere((element) => element.sId == sId).status = 0;
-        success();
+        loadData(false);
       } else {
         failToast(response.message, notify: true);
       }
@@ -66,8 +69,7 @@ class EnvViewModel extends BaseViewModel {
 
       if (response.success) {
         "禁用成功".toast();
-        list.firstWhere((element) => element.sId == sId).status = 1;
-        success();
+        loadData(false);
       } else {
         failToast(response.message, notify: true);
       }

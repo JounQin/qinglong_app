@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:qinglong_app/base/base_state_widget.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/base/theme.dart';
+import 'package:qinglong_app/base/ui/search_cell.dart';
 import 'package:qinglong_app/module/task/intime_log/intime_log_page.dart';
 import 'package:qinglong_app/module/task/task_bean.dart';
 import 'package:qinglong_app/module/task/task_viewmodel.dart';
@@ -50,7 +51,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
     return RefreshIndicator(
       color: Theme.of(context).primaryColor,
       onRefresh: () async {
-        return model.loadData( false);
+        return model.loadData(false);
       },
       child: IconTheme(
         data: const IconThemeData(
@@ -100,45 +101,20 @@ class _TaskPageState extends ConsumerState<TaskPage> {
 
   Widget searchCell(WidgetRef context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 10,
+      color: ref.watch(themeProvider).themeColor.settingBgColor(),
+      padding: const EdgeInsets.only(
+        left: 15,
       ),
       child: Row(
         children: [
           Expanded(
-            child: CupertinoSearchTextField(
-              onSubmitted: (value) {
-                setState(() {});
-              },
-              onSuffixTap: () {
-                _searchController.text = "";
-                setState(() {});
-              },
-              controller: _searchController,
-              borderRadius: BorderRadius.circular(
-                30,
-              ),
+            child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 5,
+                vertical: 10,
               ),
-              suffixInsets: const EdgeInsets.only(
-                right: 15,
+              child: SearchCell(
+                controller: _searchController,
               ),
-              prefixInsets: EdgeInsets.only(
-                top: Platform.isAndroid ? 10 : 6,
-                bottom: 6,
-                left: 15,
-              ),
-              placeholderStyle: TextStyle(
-                fontSize: 16,
-                color: context.watch(themeProvider).themeColor.descColor(),
-              ),
-              style: const TextStyle(
-                fontSize: 16,
-              ),
-              placeholder: "搜索",
             ),
           ),
           Material(
@@ -164,7 +140,7 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                     TaskViewModel.runningStr,
                     style: TextStyle(
                       color:
-                          currentState == TaskViewModel.runningStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      currentState == TaskViewModel.runningStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -202,15 +178,16 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                     style: TextStyle(
                       fontSize: 14,
                       color:
-                          currentState == TaskViewModel.disableStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      currentState == TaskViewModel.disableStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
                     ),
                   ),
                   value: TaskViewModel.disableStr,
                 ),
               ],
               child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 10,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 10,
                 ),
                 child: Text(
                   "筛选",
@@ -258,7 +235,7 @@ class TaskItemCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: ref.watch(themeProvider).themeColor.settingBgColor(),
+      color: bean.isPinned == 1 ? ref.watch(themeProvider).themeColor.pinColor() : ref.watch(themeProvider).themeColor.settingBgColor(),
       child: Slidable(
         key: ValueKey(bean.sId),
         endActionPane: ActionPane(
@@ -268,7 +245,7 @@ class TaskItemCell extends StatelessWidget {
             SlidableAction(
               backgroundColor: const Color(0xff5D5E70),
               onPressed: (_) {
-                WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+                WidgetsBinding.instance?.endOfFrame.then((timeStamp) {
                   Navigator.of(context).pushNamed(Routes.routeAddTask, arguments: bean);
                 });
               },
@@ -278,19 +255,15 @@ class TaskItemCell extends StatelessWidget {
             SlidableAction(
               backgroundColor: const Color(0xffF19A39),
               onPressed: (_) {
-                WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-                  pinTask(context);
-                });
+                pinTask(context);
               },
               foregroundColor: Colors.white,
-              icon: bean.isPinned! == 0 ? CupertinoIcons.pin : CupertinoIcons.pin_slash,
+              icon: (bean.isPinned ?? 0) == 0 ? CupertinoIcons.pin : CupertinoIcons.pin_slash,
             ),
             SlidableAction(
               backgroundColor: const Color(0xffA356D6),
               onPressed: (_) {
-                WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-                  enableTask(context);
-                });
+                enableTask(context);
               },
               foregroundColor: Colors.white,
               icon: bean.isDisabled! == 0 ? Icons.dnd_forwardslash : Icons.check_circle_outline_sharp,
@@ -298,9 +271,7 @@ class TaskItemCell extends StatelessWidget {
             SlidableAction(
               backgroundColor: const Color(0xffEA4D3E),
               onPressed: (_) {
-                WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-                  delTask(context, ref);
-                });
+                delTask(context, ref);
               },
               foregroundColor: Colors.white,
               icon: CupertinoIcons.delete,
@@ -314,13 +285,17 @@ class TaskItemCell extends StatelessWidget {
             SlidableAction(
               backgroundColor: const Color(0xffD25535),
               onPressed: (_) {
-                WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-                  if (bean.status! == 1) {
-                    startCron(context, ref);
-                  } else {
-                    stopCron(context, ref);
-                  }
-                });
+                if (bean.status! == 1) {
+                  startCron(
+                    context,
+                    ref,
+                  );
+                } else {
+                  stopCron(
+                    context,
+                    ref,
+                  );
+                }
               },
               foregroundColor: Colors.white,
               icon: bean.status! == 1 ? CupertinoIcons.memories : CupertinoIcons.stop_circle,
@@ -328,7 +303,10 @@ class TaskItemCell extends StatelessWidget {
             SlidableAction(
               backgroundColor: const Color(0xff606467),
               onPressed: (_) {
-                WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+                Future.delayed(
+                    const Duration(
+                      milliseconds: 250,
+                    ), () {
                   logCron(context, ref);
                 });
               },
@@ -338,14 +316,14 @@ class TaskItemCell extends StatelessWidget {
           ],
         ),
         child: Material(
-          color: ref.watch(themeProvider).themeColor.settingBgColor(),
+          color: bean.isPinned == 1 ? ref.watch(themeProvider).themeColor.pinColor() : ref.watch(themeProvider).themeColor.settingBgColor(),
           child: InkWell(
             onTap: () {
               Navigator.of(context).pushNamed(Routes.routeTaskDetail, arguments: bean);
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              color: bean.isPinned == 1 ? ref.watch(themeProvider).themeColor.pinColor() : Colors.transparent,
+              color: Colors.transparent,
               padding: const EdgeInsets.symmetric(
                 horizontal: 15,
                 vertical: 8,
@@ -363,30 +341,12 @@ class TaskItemCell extends StatelessWidget {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            bean.isDisabled == 1
-                                ? const Icon(
-                                    Icons.dnd_forwardslash,
-                                    size: 18,
-                                    color: Color(0xffEA4D3E),
-                                  )
-                                : const SizedBox.shrink(),
-                            SizedBox(
-                              width: bean.isDisabled == 1 ? 5 : 0,
-                            ),
-                            bean.status == 1
-                                ? const SizedBox.shrink()
-                                : SizedBox(
-                                    width: 13,
-                                    height: 13,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: ref.watch(themeProvider).primaryColor,
-                                    ),
-                                  ),
-                            SizedBox(
-                              width: bean.status == 1 ? 0 : 5,
-                            ),
-                            Expanded(
+                            ConstrainedBox(
+                              constraints: BoxConstraints.loose(
+                                Size.fromWidth(
+                                  MediaQuery.of(context).size.width / 2,
+                                ),
+                              ),
                               child: Material(
                                 color: Colors.transparent,
                                 child: Text(
@@ -401,6 +361,30 @@ class TaskItemCell extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            bean.status == 0
+                                ? Image.asset(
+                                    "assets/images/icon_running.png",
+                                    fit: BoxFit.cover,
+                                    width: 45,
+                                  )
+                                : Image.asset(
+                                    "assets/images/icon_idle.png",
+                                    fit: BoxFit.cover,
+                                    width: 45,
+                                  ),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            bean.isDisabled == 1
+                                ? Image.asset(
+                                    "assets/images/icon_task_disable.png",
+                                    fit: BoxFit.cover,
+                                    width: 45,
+                                  )
+                                : const SizedBox.shrink()
                           ],
                         ),
                       ),
@@ -459,52 +443,50 @@ class TaskItemCell extends StatelessWidget {
   }
 
   startCron(BuildContext context, WidgetRef ref) async {
-    await ref.read(taskProvider).runCrons( bean.sId!);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    await ref.read(taskProvider).runCrons(bean.sId!);
+    Future.delayed(const Duration(milliseconds: 250), () {
       logCron(context, ref);
     });
   }
 
   stopCron(BuildContext context, WidgetRef ref) {
-    ref.read(taskProvider).stopCrons( bean.sId!);
+    ref.read(taskProvider).stopCrons(bean.sId!);
   }
 
   logCron(BuildContext context, WidgetRef ref) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      showCupertinoDialog(
-          useRootNavigator: false,
-          builder: (BuildContext context) {
-            return CupertinoAlertDialog(
-              title: Text(
-                "${bean.name}运行日志",
-                maxLines: 1,
-                style: const TextStyle(overflow: TextOverflow.ellipsis),
-              ),
-              content: InTimeLogPage(bean.sId!, bean.status == 0),
-              actions: [
-                CupertinoDialogAction(
-                  child: Text(
-                    "知道了",
-                    style: TextStyle(color: Theme.of(context).primaryColor),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    ref.read(taskProvider).loadData( false);
-                  },
+    showCupertinoDialog(
+        useRootNavigator: false,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text(
+              "${bean.name}运行日志",
+              maxLines: 1,
+              style: const TextStyle(overflow: TextOverflow.ellipsis),
+            ),
+            content: InTimeLogPage(bean.sId!, bean.status == 0),
+            actions: [
+              CupertinoDialogAction(
+                child: Text(
+                  "知道了",
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
-              ],
-            );
-          },
-          context: context);
-    });
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  ref.read(taskProvider).loadData(false);
+                },
+              ),
+            ],
+          );
+        },
+        context: context);
   }
 
   void enableTask(BuildContext context) {
-    ref.read(taskProvider).enableTask( bean.sId!, bean.isDisabled!);
+    ref.read(taskProvider).enableTask(bean.sId!, bean.isDisabled!);
   }
 
   void pinTask(BuildContext context) {
-    ref.read(taskProvider).pinTask( bean.sId!, bean.isPinned!);
+    ref.read(taskProvider).pinTask(bean.sId!, bean.isPinned!);
   }
 
   void delTask(BuildContext context, WidgetRef ref) {

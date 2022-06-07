@@ -69,7 +69,7 @@ class ThemeViewModel extends ChangeNotifier {
         secondary: _primaryColor,
         primary: _primaryColor,
       ),
-      scaffoldBackgroundColor: const Color(0xfff5f5f5),
+      scaffoldBackgroundColor: const Color(0xffffffff),
       inputDecorationTheme: InputDecorationTheme(
         labelStyle: TextStyle(
           color: _primaryColor,
@@ -223,6 +223,8 @@ abstract class ThemeColors {
 
   Color tabBarColor();
 
+  Color blackAndWhite();
+
   Color pinColor();
 
   Color buttonBgColor();
@@ -239,6 +241,11 @@ class LightThemeColors extends ThemeColors {
   @override
   Color pinColor() {
     return const Color(0xffF7F7F7);
+  }
+
+  @override
+  Color blackAndWhite() {
+    return Colors.white;
   }
 
   @override
@@ -286,6 +293,11 @@ class DartThemeColors extends ThemeColors {
   @override
   Map<String, TextStyle> codeEditorTheme() {
     return qinglongDarkTheme;
+  }
+
+  @override
+  Color blackAndWhite() {
+    return Colors.black;
   }
 
   @override

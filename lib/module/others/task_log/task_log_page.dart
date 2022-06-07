@@ -7,6 +7,7 @@ import 'package:qinglong_app/base/ql_app_bar.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/base/theme.dart';
 import 'package:qinglong_app/base/ui/lazy_load_state.dart';
+import 'package:qinglong_app/base/ui/search_cell.dart';
 import 'package:qinglong_app/module/others/task_log/task_log_bean.dart';
 import 'package:qinglong_app/utils/extension.dart';
 
@@ -20,6 +21,27 @@ class TaskLogPage extends ConsumerStatefulWidget {
 
 class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<TaskLogPage> {
   List<TaskLogBean> list = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  Widget searchCell(WidgetRef context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 10,
+      ),
+      child: SearchCell(
+        controller: _searchController,
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(() {
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,72 +59,79 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
             )
           : ListView.builder(
               itemBuilder: (context, index) {
-                TaskLogBean item = list[index];
-
+                if (index == 0) {
+                  return searchCell(ref);
+                }
+                TaskLogBean item = list[index - 1];
+                if (_searchController.text.isNotEmpty && !(item.name?.contains(_searchController.text) ?? false)) {
+                  return const SizedBox.shrink();
+                }
                 return ColoredBox(
                   color: ref.watch(themeProvider).themeColor.settingBgColor(),
                   child: (item.isDir ?? false)
                       ? ExpansionTile(
-                    title: Text(
-                      item.name ?? "",
-                      style: TextStyle(
-                        color: ref.watch(themeProvider).themeColor.titleColor(),
-                        fontSize: 16,
-                      ),
-                    ),
-                    children: (item.files?.isNotEmpty ?? false)
-                        ? item.files!
-                        .map((e) => ListTile(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
-                          "path": item.name,
-                          "title": e,
-                        });
-                      },
-                      title: Text(
-                        e,
-                        style: TextStyle(
-                          color: ref.watch(themeProvider).themeColor.titleColor(),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ))
-                        .toList()
-                        : (item.children ?? [])
-                        .map((e) => ListTile(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
-                          "path": item.name,
-                          "title": e.title,
-                        });
-                      },
-                      title: Text(
-                        e.title ?? "",
-                        style: TextStyle(
-                          color: ref.watch(themeProvider).themeColor.titleColor(),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ))
-                        .toList(),
-                  )
+                          title: Text(
+                            item.name ?? "",
+                            style: TextStyle(
+                              color: ref.watch(themeProvider).themeColor.titleColor(),
+                              fontSize: 16,
+                            ),
+                          ),
+                          children: (item.files?.isNotEmpty ?? false)
+                              ? item.files!
+                                  .map((e) => ListTile(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
+                                            "path": item.name,
+                                            "title": e,
+                                          });
+                                        },
+                                        title: Text(
+                                          e,
+                                          style: TextStyle(
+                                            color: ref.watch(themeProvider).themeColor.titleColor(),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList()
+                              : (item.children ?? [])
+                                  .map((e) => ListTile(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
+                                            "path": item.name,
+                                            "title": e.title,
+                                          });
+                                        },
+                                        title: Text(
+                                          e.title ?? "",
+                                          style: TextStyle(
+                                            color: ref.watch(themeProvider).themeColor.titleColor(),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                        )
                       : ListTile(
-                    onTap: () {
-                      if (item.isDir ?? false) {
-                        "该文件夹为空".toast();
-                        return;
-                      }
-
-                      Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: item.name);
-                    },
-                    title: Text(
-                      item.name ?? "",
-                      style: TextStyle(
-                        color: ref.watch(themeProvider).themeColor.titleColor(),
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+                          onTap: () {
+                            if (item.isDir ?? false) {
+                              "该文件夹为空".toast();
+                              return;
+                            }
+                            Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
+                              "path": "",
+                              "title": item.name,
+                            });
+                          },
+                          title: Text(
+                            item.name ?? "",
+                            style: TextStyle(
+                              color: ref.watch(themeProvider).themeColor.titleColor(),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                 );
               },
               itemCount: list.length,

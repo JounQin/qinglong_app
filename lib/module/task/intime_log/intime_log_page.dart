@@ -10,8 +10,7 @@ class InTimeLogPage extends StatefulWidget {
   final String cronId;
   final bool needTimer;
 
-  const InTimeLogPage(this.cronId, this.needTimer, {Key? key})
-      : super(key: key);
+  const InTimeLogPage(this.cronId, this.needTimer, {Key? key}) : super(key: key);
 
   @override
   _InTimeLogPageState createState() => _InTimeLogPageState();
@@ -25,28 +24,28 @@ class _InTimeLogPageState extends State<InTimeLogPage> {
   @override
   void initState() {
     super.initState();
-
-    if (widget.needTimer) {
-      _timer = Timer.periodic(
-        const Duration(seconds: 2),
-        (timer) {
-          getLogData();
-        },
-      );
-    } else {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    _timer = Timer.periodic(
+      const Duration(seconds: 2),
+      (timer) {
         getLogData();
-      });
-    }
+      },
+    );
   }
 
+  bool isRequest = false;
+  bool canRequest = true;
+
   getLogData() async {
+    if (!canRequest) return;
+    if (isRequest) return;
+    isRequest = true;
     HttpResponse<String> response = await Api.inTimeLog(widget.cronId);
 
     if (response.success) {
       content = response.bean;
       setState(() {});
     }
+    isRequest = false;
   }
 
   @override

@@ -7,6 +7,7 @@ import 'package:qinglong_app/base/ql_app_bar.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/base/theme.dart';
 import 'package:qinglong_app/base/ui/lazy_load_state.dart';
+import 'package:qinglong_app/base/ui/search_cell.dart';
 import 'package:qinglong_app/module/others/scripts/script_bean.dart';
 import 'package:qinglong_app/utils/extension.dart';
 
@@ -170,39 +171,7 @@ class _ScriptPageState extends ConsumerState<ScriptPage> with LazyLoadState<Scri
         horizontal: 15,
         vertical: 10,
       ),
-      child: CupertinoSearchTextField(
-        onSubmitted: (value) {
-          setState(() {});
-        },
-        onSuffixTap: () {
-          _searchController.text = "";
-          setState(() {});
-        },
-        controller: _searchController,
-        borderRadius: BorderRadius.circular(
-          30,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 5,
-          vertical: 5,
-        ),
-        suffixInsets: const EdgeInsets.only(
-          right: 15,
-        ),
-        prefixInsets: const EdgeInsets.only(
-          top: 6,
-          bottom: 6,
-          left: 15,
-        ),
-        placeholderStyle: TextStyle(
-          fontSize: 16,
-          color: context.watch(themeProvider).themeColor.descColor(),
-        ),
-        style: const TextStyle(
-          fontSize: 16,
-        ),
-        placeholder: "搜索",
-      ),
+      child:SearchCell(controller: _searchController,),
     );
   }
 

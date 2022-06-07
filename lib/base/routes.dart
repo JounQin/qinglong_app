@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:qinglong_app/module/change_account_page.dart';
 import 'package:qinglong_app/module/config/config_edit_page.dart';
 import 'package:qinglong_app/module/env/add_env_page.dart';
 import 'package:qinglong_app/module/env/env_bean.dart';
@@ -41,6 +42,7 @@ class Routes {
   static const String routeUpdatePassword = "/updatePassword";
   static const String routeAbout = "/about";
   static const String routeTheme = "/theme";
+  static const String routeChangeAccount = "/changeAccount";
 
   static Route<dynamic>? generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -55,7 +57,10 @@ class Routes {
         } else {
           return MaterialPageRoute(builder: (context) => const LoginPage());
         }
-
+      case routeChangeAccount:
+        return CupertinoPageRoute(
+          builder: (context) => const ChangeAccountPage(),
+        );
       case routeAddTask:
         if (settings.arguments != null) {
           return CupertinoPageRoute(
@@ -66,8 +71,7 @@ class Routes {
           return CupertinoPageRoute(builder: (context) => const AddTaskPage());
         }
       case routeAddDependency:
-        return CupertinoPageRoute(
-            builder: (context) => const AddDependencyPage());
+        return CupertinoPageRoute(builder: (context) => const AddDependencyPage());
       case routeAddEnv:
         if (settings.arguments != null) {
           return CupertinoPageRoute(

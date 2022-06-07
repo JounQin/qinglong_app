@@ -37,76 +37,99 @@ class _LoginLogPageState extends ConsumerState<LoginLogPage>
       ),
       body: list.isEmpty
           ? const Center(
-              child: CupertinoActivityIndicator(),
-            )
-          : ListView.builder(
-              itemBuilder: (context, index) {
-                LoginLogBean item = list[index];
+        child: CupertinoActivityIndicator(),
+      )
+          : ListView.separated(
+        itemBuilder: (context, index) {
+          LoginLogBean item = list[index];
 
-                return ColoredBox(
-                  color: ref.watch(themeProvider).themeColor.settingBgColor(),
-                  child: ListTile(
-                    isThreeLine: true,
-                    title: Text(
-                      Utils.formatMessageTime(item.timestamp ?? 0),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: ref.watch(themeProvider).themeColor.titleColor(),
-                      ),
-                    ),
-                    subtitle: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        SelectableText(
-                          "${item.address}",
-                          selectionWidthStyle: BoxWidthStyle.max,
-                          selectionHeightStyle: BoxHeightStyle.max,
-                          style: TextStyle(
-                            color:
-                                ref.watch(themeProvider).themeColor.descColor(),
-                            fontSize: 14,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        SelectableText(
-                          "${item.ip}",
-                          selectionWidthStyle: BoxWidthStyle.max,
-                          selectionHeightStyle: BoxHeightStyle.max,
-                          style: TextStyle(
-                            color:
-                                ref.watch(themeProvider).themeColor.descColor(),
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: item.status == 0
-                        ? Icon(
-                            CupertinoIcons.checkmark_circle,
-                            color: ref.watch(themeProvider).primaryColor,
-                            size: 16,
-                          )
-                        : const Icon(
-                            CupertinoIcons.clear_circled,
-                            color: Colors.red,
-                            size: 16,
-                          ),
+          return Row(
+            children: [
+              const SizedBox(
+                width: 15,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                );
-              },
-              itemCount: list.length,
-            ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${item.address}",
+                        style: TextStyle(
+                          color: ref
+                              .watch(themeProvider)
+                              .themeColor
+                              .titleColor(),
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          top: 2,
+                        ),
+                        child: Image.asset(
+                          item.status == 0
+                              ? "assets/images/icon_success.png"
+                              : "assets/images/icon_fail.png",
+                          width: 30,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  SelectableText(
+                    "${item.ip}",
+                    selectionWidthStyle: BoxWidthStyle.max,
+                    selectionHeightStyle: BoxHeightStyle.max,
+                    style: TextStyle(
+                      color:
+                      ref.watch(themeProvider).themeColor.descColor(),
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Text(
+                Utils.formatMessageTime(item.timestamp ?? 0),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: ref.watch(themeProvider).themeColor.descColor(),
+                ),
+              ),
+              const SizedBox(
+                width: 15,
+              ),
+            ],
+          );
+        },
+        itemCount: list.length,
+        separatorBuilder: (BuildContext context, int index) {
+          return const Divider(
+            indent: 15,
+            height: 1,
+          );
+        },
+      ),
     );
   }
 
   Future<void> loadData() async {
-    HttpResponse<List<LoginLogBean>> response = await Api.loginLog();
+    HttpResponse<List<LoginLogBean>> response =
+    await Api.loginLog();
 
     if (response.success) {
       if (response.bean == null || response.bean!.isEmpty) {

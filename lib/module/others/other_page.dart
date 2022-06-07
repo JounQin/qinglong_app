@@ -26,14 +26,7 @@ class _OtherPageState extends ConsumerState<OtherPage> {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(
-              horizontal: 15,
               vertical: 15,
-            ),
-            decoration: BoxDecoration(
-              color: ref.watch(themeProvider).themeColor.settingBordorColor(),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(15),
-              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -225,14 +218,7 @@ class _OtherPageState extends ConsumerState<OtherPage> {
           ),
           Container(
             margin: const EdgeInsets.symmetric(
-              horizontal: 15,
               vertical: 15,
-            ),
-            decoration: BoxDecoration(
-              color: ref.watch(themeProvider).themeColor.settingBordorColor(),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(15),
-              ),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -287,6 +273,41 @@ class _OtherPageState extends ConsumerState<OtherPage> {
                       children: [
                         Text(
                           "主题设置",
+                          style: TextStyle(
+                            color: ref.watch(themeProvider).themeColor.titleColor(),
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(
+                          CupertinoIcons.right_chevron,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Divider(
+                  indent: 15,
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    Navigator.of(context).pushNamed(Routes.routeChangeAccount);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                      top: 5,
+                      bottom: 5,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "切换账号",
                           style: TextStyle(
                             color: ref.watch(themeProvider).themeColor.titleColor(),
                             fontSize: 16,
