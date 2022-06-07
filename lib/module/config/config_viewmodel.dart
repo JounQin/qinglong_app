@@ -12,7 +12,7 @@ class ConfigViewModel extends BaseViewModel {
   Map<String, String> content = {};
 
   Future<void> loadData([isLoading = true]) async {
-    if (isLoading) {
+    if (isLoading && list.isEmpty) {
       loading(notify: true);
     }
 

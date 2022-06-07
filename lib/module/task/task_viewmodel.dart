@@ -20,7 +20,7 @@ class TaskViewModel extends BaseViewModel {
   List<TaskBean> disabled = [];
 
   Future<void> loadData([isLoading = true]) async {
-    if (isLoading) {
+    if (isLoading && list.isEmpty) {
       loading(notify: true);
     }
 
