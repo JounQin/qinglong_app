@@ -345,7 +345,7 @@ class _TaskDetailPageState extends ConsumerState<TaskDetailPage> {
   startCron(BuildContext context, WidgetRef ref) async {
     await ref.read(taskProvider).runCrons(widget.taskBean.sId!);
     setState(() {});
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       showLog();
     });
   }

@@ -121,6 +121,7 @@ class _CodeWidgetState extends State<CodeWidget>
     with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SelectableText.rich(
       TextSpan(
         style: GoogleFonts.droidSansMono(fontSize: 14).apply(

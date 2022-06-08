@@ -41,7 +41,7 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
 
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       focusNode.requestFocus();
     });
   }
@@ -117,24 +117,10 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
       ),
       body: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 10,
-          ),
-          child: CodeField(
-            controller: _codeController!,
-            expands: true,
-            wrap: true,
-            lineNumberStyle: LineNumberStyle(
-              width: 0,
-              margin: 0,
-              textStyle: TextStyle(
-                color: ref.watch(themeProvider).themeColor.descColor(),
-              ),
-            ),
-            background: ref.watch(themeProvider).themeColor.tabBarColor(),
-          ),
+        child: CodeField(
+          controller: _codeController!,
+          expands: true,
+          background: ref.watch(themeProvider).themeColor.tabBarColor(),
         ),
       ),
     );

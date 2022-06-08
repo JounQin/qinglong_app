@@ -65,103 +65,112 @@ class _ScriptPageState extends ConsumerState<ScriptPage> with LazyLoadState<Scri
       ),
       body: list.isEmpty
           ? const Center(
-        child: CupertinoActivityIndicator(),
-      )
-          : ListView.builder(
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return searchCell(ref);
-          }
-
-          ScriptBean item = list[index - 1];
-
-          if (_searchController.text.isEmpty ||
-              (item.title?.contains(_searchController.text) ?? false) ||
-              (item.value?.contains(_searchController.text) ?? false) ||
-              ((item.children?.where((e) {
-                return (e.title?.contains(_searchController.text) ?? false) || (e.value?.contains(_searchController.text) ?? false);
-              }).isNotEmpty ??
-                  false))) {
-            return ColoredBox(
-              color: ref.watch(themeProvider).themeColor.settingBgColor(),
-              child: (item.children != null && item.children!.isNotEmpty)
-                  ? ExpansionTile(
-                title: Text(
-                  item.title ?? "",
-                  style: TextStyle(
-                    color: (item.disabled ?? false)
-                        ? ref.watch(themeProvider).themeColor.descColor()
-                        : ref.watch(themeProvider).themeColor.titleColor(),
-                    fontSize: 16,
-                  ),
-                ),
-                children: item.children!
-                    .where((element) {
-                  if (_searchController.text.isEmpty) {
-                    return true;
+              child: CupertinoActivityIndicator(),
+            )
+          : RefreshIndicator(
+              color: Theme.of(context).primaryColor,
+              onRefresh: () async {
+                await loadData();
+                return Future.value();
+              },
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return searchCell(ref);
                   }
-                  return (element.title?.contains(_searchController.text) ?? false) ||
-                      (element.value?.contains(_searchController.text) ?? false);
-                })
-                    .map((e) => ListTile(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                      Routes.routeScriptDetail,
-                      arguments: {
-                        "title": e.title,
-                        "path": e.parent,
-                      },
-                    ).then((value) {
-                      if (value != null && value == true) {
-                        loadData();
-                      }
-                    });
-                  },
-                  title: Text(
-                    e.title ?? "",
-                    style: TextStyle(
-                      color: (item.disabled ?? false)
-                          ? ref.watch(themeProvider).themeColor.descColor()
-                          : ref.watch(themeProvider).themeColor.titleColor(),
-                      fontSize: 14,
-                    ),
-                  ),
-                ))
-                    .toList(),
-              )
-                  : ListTile(
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    Routes.routeScriptDetail,
-                    arguments: {
-                      "title": item.title,
-                      "path": "",
-                    },
-                  ).then(
-                        (value) {
-                      if (value != null && value == true) {
-                        loadData();
-                      }
-                    },
-                  );
+
+                  ScriptBean item = list[index - 1];
+
+                  if (_searchController.text.isEmpty ||
+                      (item.title?.contains(_searchController.text) ?? false) ||
+                      (item.value?.contains(_searchController.text) ?? false) ||
+                      ((item.children?.where((e) {
+                            return (e.title?.contains(_searchController.text) ?? false) || (e.value?.contains(_searchController.text) ?? false);
+                          }).isNotEmpty ??
+                          false))) {
+                    return ColoredBox(
+                      color: ref.watch(themeProvider).themeColor.settingBgColor(),
+                      child: (item.children != null && item.children!.isNotEmpty)
+                          ? ExpansionTile(
+                              title: Text(
+                                item.title ?? "",
+                                style: TextStyle(
+                                  color: (item.disabled ?? false)
+                                      ? ref.watch(themeProvider).themeColor.descColor()
+                                      : ref.watch(themeProvider).themeColor.titleColor(),
+                                  fontSize: 16,
+                                ),
+                              ),
+                              children: item.children!
+                                  .where((element) {
+                                    if (_searchController.text.isEmpty) {
+                                      return true;
+                                    }
+                                    return (element.title?.contains(_searchController.text) ?? false) ||
+                                        (element.value?.contains(_searchController.text) ?? false);
+                                  })
+                                  .map((e) => ListTile(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                            Routes.routeScriptDetail,
+                                            arguments: {
+                                              "title": e.title,
+                                              "path": e.parent,
+                                            },
+                                          ).then((value) {
+                                            if (value != null && value == true) {
+                                              loadData();
+                                            }
+                                          });
+                                        },
+                                        title: Text(
+                                          e.title ?? "",
+                                          style: TextStyle(
+                                            color: (item.disabled ?? false)
+                                                ? ref.watch(themeProvider).themeColor.descColor()
+                                                : ref.watch(themeProvider).themeColor.titleColor(),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
+                            )
+                          : ListTile(
+                              onTap: () {
+                                Navigator.of(context).pushNamed(
+                                  Routes.routeScriptDetail,
+                                  arguments: {
+                                    "title": item.title,
+                                    "path": "",
+                                  },
+                                ).then(
+                                  (value) {
+                                    if (value != null && value == true) {
+                                      loadData();
+                                    }
+                                  },
+                                );
+                              },
+                              title: Text(
+                                item.title ?? "",
+                                style: TextStyle(
+                                  color: (item.disabled ?? false)
+                                      ? ref.watch(themeProvider).themeColor.descColor()
+                                      : ref.watch(themeProvider).themeColor.titleColor(),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
                 },
-                title: Text(
-                  item.title ?? "",
-                  style: TextStyle(
-                    color: (item.disabled ?? false)
-                        ? ref.watch(themeProvider).themeColor.descColor()
-                        : ref.watch(themeProvider).themeColor.titleColor(),
-                    fontSize: 16,
-                  ),
-                ),
+                itemCount: list.length + 1,
               ),
-            );
-          } else {
-            return const SizedBox.shrink();
-          }
-        },
-        itemCount: list.length + 1,
-      ),
+            ),
     );
   }
 
@@ -171,7 +180,9 @@ class _ScriptPageState extends ConsumerState<ScriptPage> with LazyLoadState<Scri
         horizontal: 15,
         vertical: 10,
       ),
-      child:SearchCell(controller: _searchController,),
+      child: SearchCell(
+        controller: _searchController,
+      ),
     );
   }
 
@@ -220,61 +231,70 @@ class _ScriptPageState extends ConsumerState<ScriptPage> with LazyLoadState<Scri
               padding: const EdgeInsets.symmetric(
                 vertical: 10,
               ),
-              child: TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  contentPadding: EdgeInsets.all(4),
-                  hintText: "请输入脚本名称",
-                  hintStyle: TextStyle(
-                    fontSize: 14,
+              child: Material(
+                color: Colors.transparent,
+                child: TextField(
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(4),
+                    hintText: "请输入脚本名称",
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
+                  autofocus: false,
                 ),
-                autofocus: false,
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            const Text(
-              "脚本所属文件夹:",
-              style: TextStyle(
-                fontSize: 14,
+            const Material(
+              color: Colors.transparent,
+              child: Text(
+                "脚本所属文件夹:",
+                style: TextStyle(
+                  fontSize: 14,
+                ),
               ),
             ),
             const SizedBox(
               height: 10,
             ),
-            DropdownButtonFormField<String>(
-              items: list
-                  .where((element) => element.children?.isNotEmpty ?? false)
-                  .map((e) => DropdownMenuItem(
-                value: e.value,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Text(
-                    e.value ?? "",
-                    maxLines: 2,
-                  ),
-                ),
-              ))
-                  .toList()
-                ..insert(
-                    0,
-                    DropdownMenuItem(
-                      value: "",
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width / 2,
-                        child: const Text(
-                          "根目录",
-                          maxLines: 2,
+            Material(
+              color: Colors.transparent,
+              child: DropdownButtonFormField<String>(
+                items: list
+                    .where((element) => element.children?.isNotEmpty ?? false)
+                    .map((e) => DropdownMenuItem(
+                          value: e.value,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: Text(
+                              e.value ?? "",
+                              maxLines: 2,
+                            ),
+                          ),
+                        ))
+                    .toList()
+                  ..insert(
+                      0,
+                      DropdownMenuItem(
+                        value: "",
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width / 2,
+                          child: const Text(
+                            "根目录",
+                            maxLines: 2,
+                          ),
                         ),
-                      ),
-                    )),
-              value: scriptPath,
-              onChanged: (value) {
-                scriptPath = value ?? "";
-              },
+                      )),
+                value: scriptPath,
+                onChanged: (value) {
+                  scriptPath = value ?? "";
+                },
+              ),
             ),
           ],
         ),

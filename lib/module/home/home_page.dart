@@ -44,7 +44,7 @@ class _HomePageState extends ConsumerState<HomePage>
     initTitles();
     _title = titles[0].title;
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       getSystemBean();
     });
   }

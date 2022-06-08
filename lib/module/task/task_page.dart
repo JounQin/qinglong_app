@@ -245,7 +245,7 @@ class TaskItemCell extends StatelessWidget {
             SlidableAction(
               backgroundColor: const Color(0xff5D5E70),
               onPressed: (_) {
-                WidgetsBinding.instance?.endOfFrame.then((timeStamp) {
+                WidgetsBinding.instance.endOfFrame.then((timeStamp) {
                   Navigator.of(context).pushNamed(Routes.routeAddTask, arguments: bean);
                 });
               },

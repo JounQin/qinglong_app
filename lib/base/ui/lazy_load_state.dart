@@ -6,7 +6,7 @@ mixin LazyLoadState<T extends StatefulWidget> on State<T> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       var route = ModalRoute.of(context);
       void handler(status) {
         if (status == AnimationStatus.completed) {

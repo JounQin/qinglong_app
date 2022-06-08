@@ -62,7 +62,7 @@ class QlAppState extends ConsumerState<QlApp> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MediaQuery(
-        data: MediaQueryData.fromWindow(WidgetsBinding.instance!.window).copyWith(
+        data: MediaQueryData.fromWindow(WidgetsBinding.instance.window).copyWith(
           textScaleFactor: 1,
         ),
         child: MaterialApp(

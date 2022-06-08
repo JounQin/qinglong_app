@@ -31,7 +31,7 @@ class _UpdatePasswordPageState extends ConsumerState<UpdatePasswordPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         focusNode.requestFocus();
       },

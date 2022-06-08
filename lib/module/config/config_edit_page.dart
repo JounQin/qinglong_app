@@ -33,7 +33,7 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
 
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       focusNode.requestFocus();
     });
   }

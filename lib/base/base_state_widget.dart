@@ -29,7 +29,7 @@ class _BaseStateWidgetState<T extends BaseViewModel> extends ConsumerState<BaseS
   Widget build(BuildContext context) {
     var viewModel = ref.watch<T>(widget.model);
     if (viewModel.failedToast != null) {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         (viewModel.failedToast ?? "").toast();
         viewModel.clearToast();
       });
@@ -72,7 +72,7 @@ class _BaseStateWidgetState<T extends BaseViewModel> extends ConsumerState<BaseS
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       if (widget.onReady != null && !widget.lazyLoad) {
         widget.onReady!(ref.read<T>(widget.model));
       }

@@ -36,7 +36,7 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
     } else {
       taskBean = TaskBean();
     }
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         focusNode.requestFocus();
       },

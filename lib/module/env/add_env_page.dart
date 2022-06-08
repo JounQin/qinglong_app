@@ -35,7 +35,7 @@ class _AddEnvPageState extends ConsumerState<AddEnvPage> {
     } else {
       envBean = EnvBean();
     }
-    WidgetsBinding.instance?.addPostFrameCallback(
+    WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
         focusNode.requestFocus();
       },

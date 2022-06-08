@@ -283,7 +283,7 @@ class DependencyCell extends ConsumerWidget {
   }
 
   void showLog(WidgetRef ref, String? sId) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       showCupertinoDialog(
           builder: (BuildContext context) {
             return CupertinoAlertDialog(

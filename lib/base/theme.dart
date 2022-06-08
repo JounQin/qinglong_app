@@ -24,7 +24,7 @@ class ThemeViewModel extends ChangeNotifier {
   ThemeViewModel() {
     _primaryColor = Color(getIt<UserInfoViewModel>().primaryColor);
     primaryColor = Color(getIt<UserInfoViewModel>().primaryColor);
-    var brightness = SchedulerBinding.instance!.window.platformBrightness;
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
     _isInDarkMode = brightness == Brightness.dark;
     changeThemeReal(_isInDarkMode, false);
   }

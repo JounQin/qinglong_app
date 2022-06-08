@@ -219,7 +219,7 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
           ? const Center(
               child: CupertinoActivityIndicator(),
             )
-          : CodeWidget(
+          : ScriptCodeWidget(
               content: content ?? "",
             ),
     );
@@ -264,4 +264,41 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
   void onLazyLoad() {
     loadData();
   }
+}
+
+
+class ScriptCodeWidget extends StatefulWidget {
+  final String content;
+
+  const ScriptCodeWidget({
+    Key? key,
+    required this.content,
+  }) : super(key: key);
+
+  @override
+  State<ScriptCodeWidget> createState() => _ScriptCodeWidgetState();
+}
+
+class _ScriptCodeWidgetState extends State<ScriptCodeWidget>{
+  @override
+  Widget build(BuildContext context) {
+    return SelectableText.rich(
+      TextSpan(
+        style: GoogleFonts.droidSansMono(fontSize: 14).apply(
+          fontSizeFactor: 1,
+        ),
+        children: <TextSpan>[
+          DartSyntaxHighlighter(SyntaxHighlighterStyle.lightThemeStyle())
+              .format(widget.content)
+        ],
+      ),
+      style: DefaultTextStyle.of(context).style.apply(
+        fontSizeFactor: 1,
+      ),
+      selectionWidthStyle: BoxWidthStyle.max,
+      selectionHeightStyle: BoxHeightStyle.max,
+      autofocus: true,
+    );
+  }
+
 }
