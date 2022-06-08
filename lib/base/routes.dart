@@ -58,92 +58,92 @@ class Routes {
           return MaterialPageRoute(builder: (context) => const LoginPage());
         }
       case routeChangeAccount:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const ChangeAccountPage(),
         );
       case routeAddTask:
         if (settings.arguments != null) {
-          return CupertinoPageRoute(
+          return MaterialPageRoute(
               builder: (context) => AddTaskPage(
                     taskBean: settings.arguments as TaskBean,
                   ));
         } else {
-          return CupertinoPageRoute(builder: (context) => const AddTaskPage());
+          return MaterialPageRoute(builder: (context) => const AddTaskPage());
         }
       case routeAddDependency:
-        return CupertinoPageRoute(builder: (context) => const AddDependencyPage());
+        return MaterialPageRoute(builder: (context) => const AddDependencyPage());
       case routeAddEnv:
         if (settings.arguments != null) {
-          return CupertinoPageRoute(
+          return MaterialPageRoute(
               builder: (context) => AddEnvPage(
                     envBean: settings.arguments as EnvBean,
                   ));
         } else {
-          return CupertinoPageRoute(builder: (context) => const AddEnvPage());
+          return MaterialPageRoute(builder: (context) => const AddEnvPage());
         }
       case routeConfigEdit:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => ConfigEditPage(
             (settings.arguments as Map)["title"],
             (settings.arguments as Map)["content"],
           ),
         );
       case routeLoginLog:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const LoginLogPage(),
         );
       case routeTaskLog:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const TaskLogPage(),
         );
       case routeScript:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const ScriptPage(),
         );
       case routeDependency:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const DependencyPage(),
         );
       case routeTaskLogDetail:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => TaskLogDetailPage(
             title: (settings.arguments as Map)['title'],
             path: (settings.arguments as Map)['path'],
           ),
         );
       case routeScriptDetail:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => ScriptDetailPage(
             title: (settings.arguments as Map)["title"],
             path: (settings.arguments as Map)["path"],
           ),
         );
       case routeTaskDetail:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => TaskDetailPage(
             settings.arguments as TaskBean,
           ),
         );
       case routeEnvDetail:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => EnvDetailPage(
             settings.arguments as EnvBean,
           ),
         );
       case routeUpdatePassword:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const UpdatePasswordPage(),
         );
       case routeAbout:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const AboutPage(),
         );
       case routeTheme:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => const ThemePage(),
         );
       case routeScriptUpdate:
-        return CupertinoPageRoute(
+        return MaterialPageRoute(
           builder: (context) => ScriptEditPage(
             (settings.arguments as Map)["title"],
             (settings.arguments as Map)["path"],
