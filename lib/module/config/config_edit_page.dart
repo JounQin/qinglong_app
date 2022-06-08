@@ -27,6 +27,7 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
     _codeController?.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
     result = widget.content;
@@ -91,6 +92,15 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
         child: CodeField(
           controller: _codeController!,
           expands: true,
+          wrap: true,
+          lineNumberStyle: const LineNumberStyle(
+            width: 0,
+            margin: 0,
+            textStyle: TextStyle(
+              color: Colors.transparent,
+              fontSize: 0,
+            ),
+          ),
           background: ref.watch(themeProvider).themeColor.settingBgColor(),
         ),
       ),
