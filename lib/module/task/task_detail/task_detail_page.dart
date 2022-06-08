@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qinglong_app/base/ql_app_bar.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/base/theme.dart';
@@ -402,30 +403,16 @@ class _TaskDetailPageState extends ConsumerState<TaskDetailPage> {
   }
 
   void showLog() {
-    showCupertinoDialog(
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text(
-              "${widget.taskBean.name}运行日志",
-              maxLines: 1,
-              style: const TextStyle(overflow: TextOverflow.ellipsis),
-            ),
-            content: InTimeLogPage(widget.taskBean.sId!, widget.taskBean.status == 0),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(
-                  "知道了",
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  ref.read(taskProvider).loadData(false);
-                },
-              ),
-            ],
-          );
-        },
-        context: context);
+    showCupertinoModalBottomSheet(
+      expand: true,
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => InTimeLogPage(
+        widget.taskBean.sId!,
+        true,
+        widget.taskBean.name ?? "",
+      ),
+    );
   }
 }
 

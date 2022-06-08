@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:qinglong_app/base/base_state_widget.dart';
 import 'package:qinglong_app/base/routes.dart';
 import 'package:qinglong_app/base/theme.dart';
@@ -454,31 +455,16 @@ class TaskItemCell extends StatelessWidget {
   }
 
   logCron(BuildContext context, WidgetRef ref) {
-    showCupertinoDialog(
-        useRootNavigator: false,
-        builder: (BuildContext context) {
-          return CupertinoAlertDialog(
-            title: Text(
-              "${bean.name}运行日志",
-              maxLines: 1,
-              style: const TextStyle(overflow: TextOverflow.ellipsis),
-            ),
-            content: InTimeLogPage(bean.sId!, bean.status == 0),
-            actions: [
-              CupertinoDialogAction(
-                child: Text(
-                  "知道了",
-                  style: TextStyle(color: Theme.of(context).primaryColor),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  ref.read(taskProvider).loadData(false);
-                },
-              ),
-            ],
-          );
-        },
-        context: context);
+    showCupertinoModalBottomSheet(
+      expand: true,
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => InTimeLogPage(
+        bean.sId!,
+        true,
+        bean.name ?? "",
+      ),
+    );
   }
 
   void enableTask(BuildContext context) {
