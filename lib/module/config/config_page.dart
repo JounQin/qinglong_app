@@ -1,13 +1,18 @@
 import 'dart:ui';
 
+import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:highlight/languages/powershell.dart';
 import 'package:qinglong_app/base/base_state_widget.dart';
 import 'package:qinglong_app/base/routes.dart';
+import 'package:qinglong_app/base/sp_const.dart';
+import 'package:qinglong_app/base/theme.dart';
 import 'package:qinglong_app/base/ui/abs_underline_tabindicator.dart';
 import 'package:qinglong_app/base/ui/empty_widget.dart';
 import 'package:qinglong_app/main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qinglong_app/utils/sp_utils.dart';
 
 import '../../base/ui/syntax_highlighter.dart';
 import 'config_viewmodel.dart';
@@ -19,8 +24,7 @@ class ConfigPage extends StatefulWidget {
   ConfigPageState createState() => ConfigPageState();
 }
 
-class ConfigPageState extends State<ConfigPage>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class ConfigPageState extends State<ConfigPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   int _initIndex = 0;
   BuildContext? childContext;
 
@@ -85,14 +89,8 @@ class ConfigPageState extends State<ConfigPage>
   void editMe(WidgetRef ref) {
     if (childContext == null) return;
     navigatorState.currentState?.pushNamed(Routes.routeConfigEdit, arguments: {
-      "title": ref
-          .read(configProvider)
-          .list[DefaultTabController.of(childContext!)?.index ?? 0]
-          .title,
-      "content": ref.read(configProvider).content[ref
-          .read(configProvider)
-          .list[DefaultTabController.of(childContext!)?.index ?? 0]
-          .title]
+      "title": ref.read(configProvider).list[DefaultTabController.of(childContext!)?.index ?? 0].title,
+      "content": ref.read(configProvider).content[ref.read(configProvider).list[DefaultTabController.of(childContext!)?.index ?? 0].title]
     }).then((value) async {
       if (value != null && (value as String).isNotEmpty) {
         await ref.read(configProvider).loadContent(value);
@@ -105,7 +103,7 @@ class ConfigPageState extends State<ConfigPage>
   bool get wantKeepAlive => true;
 }
 
-class CodeWidget extends StatefulWidget {
+class CodeWidget extends ConsumerStatefulWidget {
   final String content;
 
   const CodeWidget({
@@ -114,30 +112,61 @@ class CodeWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CodeWidget> createState() => _CodeWidgetState();
+  ConsumerState<CodeWidget> createState() => _CodeWidgetState();
 }
 
-class _CodeWidgetState extends State<CodeWidget>
-    with AutomaticKeepAliveClientMixin {
+class _CodeWidgetState extends ConsumerState<CodeWidget> with AutomaticKeepAliveClientMixin {
+  CodeController? _codeController;
+
+  @override
+  void dispose() {
+    _codeController?.dispose();
+    super.dispose();
+  }
+
+  String result = "";
+
+  @override
+  void initState() {
+    result = widget.content;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SelectableText.rich(
-      TextSpan(
-        style: GoogleFonts.droidSansMono(fontSize: 14).apply(
-          fontSizeFactor: 1,
+    _codeController ??= CodeController(
+      text: result,
+      language: powershell,
+      onChange: (value) {
+        result = value;
+      },
+      theme: ref.watch(themeProvider).themeColor.codeEditorTheme(),
+      stringMap: {
+        "export": const TextStyle(fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
+      },
+    );
+    return SafeArea(
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: SpUtil.getBool(spShowLine, defValue: false) ? 0 : 10,
         ),
-        children: <TextSpan>[
-          DartSyntaxHighlighter(SyntaxHighlighterStyle.lightThemeStyle())
-              .format(widget.content)
-        ],
-      ),
-      style: DefaultTextStyle.of(context).style.apply(
-            fontSizeFactor: 1,
+        child: CodeField(
+          controller: _codeController!,
+          expands: true,
+          readOnly: true,
+          background: Colors.white,
+          wrap: SpUtil.getBool(spShowLine, defValue: false) ? false : true,
+          hideColumn: !SpUtil.getBool(spShowLine, defValue: false),
+          lineNumberStyle: LineNumberStyle(
+            textStyle: TextStyle(
+              color: ref.watch(themeProvider).themeColor.descColor(),
+              fontSize: 12,
+            ),
           ),
-      selectionWidthStyle: BoxWidthStyle.max,
-      selectionHeightStyle: BoxHeightStyle.max,
-      autofocus: true,
+        ),
+      ),
     );
   }
 

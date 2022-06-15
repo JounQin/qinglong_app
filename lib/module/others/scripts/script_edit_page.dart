@@ -1,4 +1,5 @@
 import 'package:code_text_field/code_text_field.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:highlight/languages/javascript.dart';
@@ -10,8 +11,10 @@ import 'package:highlight/languages/yaml.dart';
 import 'package:qinglong_app/base/http/api.dart';
 import 'package:qinglong_app/base/http/http.dart';
 import 'package:qinglong_app/base/ql_app_bar.dart';
+import 'package:qinglong_app/base/sp_const.dart';
 import 'package:qinglong_app/base/theme.dart';
 import 'package:qinglong_app/utils/extension.dart';
+import 'package:qinglong_app/utils/sp_utils.dart';
 
 class ScriptEditPage extends ConsumerStatefulWidget {
   final String content;
@@ -28,6 +31,7 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
   CodeController? _codeController;
   late String result;
   FocusNode focusNode = FocusNode();
+  late String preResult;
 
   @override
   void dispose() {
@@ -38,7 +42,7 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
   @override
   void initState() {
     result = widget.content;
-
+    preResult = widget.content;
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -84,7 +88,45 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
       appBar: QlAppBar(
         canBack: true,
         backCall: () {
-          Navigator.of(context).pop();
+          FocusManager.instance.primaryFocus?.unfocus();
+
+          if (preResult == result) {
+            Navigator.of(context).pop();
+          } else {
+            showCupertinoDialog(
+              context: context,
+              useRootNavigator: false,
+              builder: (childContext) => CupertinoAlertDialog(
+                title: const Text("温馨提示"),
+                content: const Text("你编辑的内容还没用提交,确定退出吗?"),
+                actions: [
+                  CupertinoDialogAction(
+                    child: const Text(
+                      "取消",
+                      style: TextStyle(
+                        color: Color(0xff999999),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(childContext).pop();
+                    },
+                  ),
+                  CupertinoDialogAction(
+                    child: Text(
+                      "确定",
+                      style: TextStyle(
+                        color: ref.watch(themeProvider).primaryColor,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(childContext).pop();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
         },
         title: '编辑${widget.title}',
         actions: [
@@ -117,19 +159,23 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
       ),
       body: SafeArea(
         top: false,
-        child: CodeField(
-          controller: _codeController!,
-          expands: true,
-          wrap: true,
-          lineNumberStyle: const LineNumberStyle(
-            width: 0,
-            margin: 0,
-            textStyle: TextStyle(
-              color: Colors.transparent,
-              fontSize: 0,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: SpUtil.getBool(spShowLine, defValue: false) ? 0 : 10,
+          ),
+          child: CodeField(
+            controller: _codeController!,
+            expands: true,
+            background: Colors.white,
+            wrap: SpUtil.getBool(spShowLine, defValue: false) ? false : true,
+            hideColumn: !SpUtil.getBool(spShowLine, defValue: false),
+            lineNumberStyle: LineNumberStyle(
+              textStyle: TextStyle(
+                color: ref.watch(themeProvider).themeColor.descColor(),
+                fontSize: 12,
+              ),
             ),
           ),
-          background: ref.watch(themeProvider).themeColor.tabBarColor(),
         ),
       ),
     );

@@ -1,20 +1,22 @@
-import 'dart:ui';
-
+import 'package:code_text_field/code_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:highlight/languages/javascript.dart';
+import 'package:highlight/languages/json.dart';
+import 'package:highlight/languages/powershell.dart';
+import 'package:highlight/languages/python.dart';
+import 'package:highlight/languages/vbscript-html.dart';
+import 'package:highlight/languages/yaml.dart';
 import 'package:qinglong_app/base/http/api.dart';
 import 'package:qinglong_app/base/http/http.dart';
 import 'package:qinglong_app/base/ql_app_bar.dart';
 import 'package:qinglong_app/base/routes.dart';
+import 'package:qinglong_app/base/sp_const.dart';
 import 'package:qinglong_app/base/theme.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:qinglong_app/base/ui/lazy_load_state.dart';
 import 'package:qinglong_app/utils/extension.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../../base/ui/syntax_highlighter.dart';
-import '../../config/config_page.dart';
+import 'package:qinglong_app/utils/sp_utils.dart';
 
 /// @author NewTab
 class ScriptDetailPage extends ConsumerStatefulWidget {
@@ -31,11 +33,62 @@ class ScriptDetailPage extends ConsumerStatefulWidget {
   _ScriptDetailPageState createState() => _ScriptDetailPageState();
 }
 
-class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
-    with LazyLoadState<ScriptDetailPage> {
+class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLoadState<ScriptDetailPage> {
   String? content;
+  CodeController? _codeController;
+  GlobalKey<CodeFieldState> codeFieldKey = GlobalKey();
 
   List<Widget> actions = [];
+  bool buttonshow = false;
+
+  void scrollToTop() {
+    codeFieldKey.currentState?.getCodeScroll()?.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.linear);
+  }
+
+  void floatingButtonVisibility() {
+    double y = codeFieldKey.currentState?.getCodeScroll()?.offset ?? 0;
+    if (y > MediaQuery.of(context).size.height / 2) {
+      if (buttonshow == true) return;
+      setState(() {
+        buttonshow = true;
+      });
+    } else {
+      if (buttonshow == false) return;
+      setState(() {
+        buttonshow = false;
+      });
+    }
+  }
+
+  String suffix = "\n\n\n";
+
+  @override
+  void dispose() {
+    _codeController?.dispose();
+    _codeController = null;
+    super.dispose();
+  }
+
+  getLanguageType(String title) {
+    if (title.endsWith(".js")) {
+      return javascript;
+    }
+
+    if (title.endsWith(".sh")) {
+      return powershell;
+    }
+
+    if (title.endsWith(".py")) {
+      return python;
+    }
+    if (title.endsWith(".json")) {
+      return json;
+    }
+    if (title.endsWith(".yaml")) {
+      return yaml;
+    }
+    return vbscriptHtml;
+  }
 
   @override
   void initState() {
@@ -85,6 +138,7 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
             Navigator.of(context).pop();
 
             showCupertinoDialog(
+              useRootNavigator: false,
               context: context,
               builder: (context) => CupertinoAlertDialog(
                 title: const Text("确认删除"),
@@ -110,8 +164,7 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
                     ),
                     onPressed: () async {
                       Navigator.of(context).pop();
-                      HttpResponse<NullResponse> result =
-                          await Api.delScript(widget.title, widget.path ?? "");
+                      HttpResponse<NullResponse> result = await Api.delScript(widget.title, widget.path ?? "");
                       if (result.success) {
                         "删除成功".toast();
                         Navigator.of(context).pop(true);
@@ -147,18 +200,44 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
 
   @override
   Widget build(BuildContext context) {
+    if (content != null) {
+      _codeController ??= CodeController(
+        text: (content ?? "") + suffix,
+        language: getLanguageType(widget.title),
+        onChange: (value) {
+          content = value + suffix;
+        },
+        theme: ref.watch(themeProvider).themeColor.codeEditorTheme(),
+        stringMap: {
+          "export": const TextStyle(fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
+        },
+      );
+    }
     return Scaffold(
+      floatingActionButton: Visibility(
+        visible: buttonshow,
+        child: FloatingActionButton(
+          mini: true,
+          onPressed: () {
+            scrollToTop();
+          },
+          elevation: 2,
+          backgroundColor: Colors.white,
+          child: const Icon(CupertinoIcons.up_arrow),
+        ),
+      ),
       appBar: QlAppBar(
         canBack: true,
         backCall: () {
           Navigator.of(context).pop();
         },
-        title: "脚本详情",
+        title: widget.title,
         actions: [
           InkWell(
             onTap: () {
               showCupertinoModalPopup(
                 context: context,
+                useRootNavigator: false,
                 builder: (context) {
                   return CupertinoActionSheet(
                     title: Container(
@@ -217,11 +296,31 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
       ),
       body: content == null
           ? const Center(
-              child: CupertinoActivityIndicator(),
-            )
-          : ScriptCodeWidget(
-              content: content ?? "",
+        child: CupertinoActivityIndicator(),
+      )
+          : SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: SpUtil.getBool(spShowLine, defValue: false) ? 0 : 10,
+          ),
+          child: CodeField(
+            key: codeFieldKey,
+            controller: _codeController!,
+            expands: true,
+            readOnly: true,
+            wrap: SpUtil.getBool(spShowLine, defValue: false) ? false : true,
+            hideColumn: !SpUtil.getBool(spShowLine, defValue: false),
+            lineNumberStyle: LineNumberStyle(
+              textStyle: TextStyle(
+                color: ref.watch(themeProvider).themeColor.descColor(),
+                fontSize: 12,
+              ),
             ),
+            background: Colors.white,
+          ),
+        ),
+      ),
     );
   }
 
@@ -234,71 +333,21 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
     if (response.success) {
       content = response.bean;
       setState(() {});
+      Future.delayed(
+        const Duration(
+          seconds: 1,
+        ),
+            () {
+          codeFieldKey.currentState?.getCodeScroll()?.addListener(floatingButtonVisibility);
+        },
+      );
     } else {
       response.message?.toast();
     }
-  }
-
-  getLanguageType(String title) {
-    if (title.endsWith(".js")) {
-      return "js";
-    }
-
-    if (title.endsWith(".sh")) {
-      return "sh";
-    }
-
-    if (title.endsWith(".py")) {
-      return "py";
-    }
-    if (title.endsWith(".json")) {
-      return "json";
-    }
-    if (title.endsWith(".yaml")) {
-      return "yaml";
-    }
-    return "html";
   }
 
   @override
   void onLazyLoad() {
     loadData();
   }
-}
-
-
-class ScriptCodeWidget extends StatefulWidget {
-  final String content;
-
-  const ScriptCodeWidget({
-    Key? key,
-    required this.content,
-  }) : super(key: key);
-
-  @override
-  State<ScriptCodeWidget> createState() => _ScriptCodeWidgetState();
-}
-
-class _ScriptCodeWidgetState extends State<ScriptCodeWidget>{
-  @override
-  Widget build(BuildContext context) {
-    return SelectableText.rich(
-      TextSpan(
-        style: GoogleFonts.droidSansMono(fontSize: 14).apply(
-          fontSizeFactor: 1,
-        ),
-        children: <TextSpan>[
-          DartSyntaxHighlighter(SyntaxHighlighterStyle.lightThemeStyle())
-              .format(widget.content)
-        ],
-      ),
-      style: DefaultTextStyle.of(context).style.apply(
-        fontSizeFactor: 1,
-      ),
-      selectionWidthStyle: BoxWidthStyle.max,
-      selectionHeightStyle: BoxHeightStyle.max,
-      autofocus: true,
-    );
-  }
-
 }

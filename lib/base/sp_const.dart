@@ -6,3 +6,4 @@ String spTheme = "dart_mode";
 String spSecretLogined = "secret_logined";
 String spCustomColor = "customColor";
 String spLoginHistory = "loginHistory";
+String spShowLine = "spShowLine";
