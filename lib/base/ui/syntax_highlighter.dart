@@ -17,7 +17,10 @@ class SyntaxHighlighterStyle {
       this.constantStyle});
 
   static SyntaxHighlighterStyle lightThemeStyle() => SyntaxHighlighterStyle(
-        baseStyle: const TextStyle(color: const Color(0xFF000000),height: 1,),
+        baseStyle: const TextStyle(
+          color: const Color(0xFF000000),
+          height: 1,
+        ),
         numberStyle: const TextStyle(color: const Color(0xFF1565C0)),
         commentStyle: const TextStyle(color: const Color(0xFF9E9E9E)),
         keywordStyle: const TextStyle(color: const Color(0xFF9C27B0)),

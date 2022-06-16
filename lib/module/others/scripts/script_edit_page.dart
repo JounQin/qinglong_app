@@ -21,7 +21,8 @@ class ScriptEditPage extends ConsumerStatefulWidget {
   final String title;
   final String path;
 
-  const ScriptEditPage(this.title, this.path, this.content, {Key? key}) : super(key: key);
+  const ScriptEditPage(this.title, this.path, this.content, {Key? key})
+      : super(key: key);
 
   @override
   _ScriptEditPageState createState() => _ScriptEditPageState();
@@ -81,7 +82,8 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
       },
       theme: ref.watch(themeProvider).themeColor.codeEditorTheme(),
       stringMap: {
-        "export": const TextStyle(fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
+        "export": const TextStyle(
+            fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
       },
     );
     return Scaffold(
@@ -132,7 +134,8 @@ class _ScriptEditPageState extends ConsumerState<ScriptEditPage> {
         actions: [
           InkWell(
             onTap: () async {
-              HttpResponse<NullResponse> response = await Api.updateScript(widget.title, widget.path, result);
+              HttpResponse<NullResponse> response =
+                  await Api.updateScript(widget.title, widget.path, result);
               if (response.success) {
                 "提交成功".toast();
                 Navigator.of(context).pop(true);

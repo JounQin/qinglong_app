@@ -37,99 +37,98 @@ class _LoginLogPageState extends ConsumerState<LoginLogPage>
       ),
       body: list.isEmpty
           ? const Center(
-        child: CupertinoActivityIndicator(),
-      )
+              child: CupertinoActivityIndicator(),
+            )
           : ListView.separated(
-        itemBuilder: (context, index) {
-          LoginLogBean item = list[index];
+              itemBuilder: (context, index) {
+                LoginLogBean item = list[index];
 
-          return Row(
-            children: [
-              const SizedBox(
-                width: 15,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${item.address}",
-                        style: TextStyle(
-                          color: ref
-                              .watch(themeProvider)
-                              .themeColor
-                              .titleColor(),
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 2,
-                        ),
-                        child: Image.asset(
-                          item.status == 0
-                              ? "assets/images/icon_success.png"
-                              : "assets/images/icon_fail.png",
-                          width: 30,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  SelectableText(
-                    "${item.ip}",
-                    selectionWidthStyle: BoxWidthStyle.max,
-                    selectionHeightStyle: BoxHeightStyle.max,
-                    style: TextStyle(
-                      color:
-                      ref.watch(themeProvider).themeColor.descColor(),
-                      fontSize: 14,
+                return Row(
+                  children: [
+                    const SizedBox(
+                      width: 15,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-              const Spacer(),
-              Text(
-                Utils.formatMessageTime(item.timestamp ?? 0),
-                style: TextStyle(
-                  fontSize: 12,
-                  color: ref.watch(themeProvider).themeColor.descColor(),
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-            ],
-          );
-        },
-        itemCount: list.length,
-        separatorBuilder: (BuildContext context, int index) {
-          return const Divider(
-            indent: 15,
-            height: 1,
-          );
-        },
-      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${item.address}",
+                              style: TextStyle(
+                                color: ref
+                                    .watch(themeProvider)
+                                    .themeColor
+                                    .titleColor(),
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 2,
+                              ),
+                              child: Image.asset(
+                                item.status == 0
+                                    ? "assets/images/icon_success.png"
+                                    : "assets/images/icon_fail.png",
+                                width: 30,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        SelectableText(
+                          "${item.ip}",
+                          selectionWidthStyle: BoxWidthStyle.max,
+                          selectionHeightStyle: BoxHeightStyle.max,
+                          style: TextStyle(
+                            color:
+                                ref.watch(themeProvider).themeColor.descColor(),
+                            fontSize: 14,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Text(
+                      Utils.formatMessageTime(item.timestamp ?? 0),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: ref.watch(themeProvider).themeColor.descColor(),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                  ],
+                );
+              },
+              itemCount: list.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider(
+                  indent: 15,
+                  height: 1,
+                );
+              },
+            ),
     );
   }
 
   Future<void> loadData() async {
-    HttpResponse<List<LoginLogBean>> response =
-    await Api.loginLog();
+    HttpResponse<List<LoginLogBean>> response = await Api.loginLog();
 
     if (response.success) {
       if (response.bean == null || response.bean!.isEmpty) {

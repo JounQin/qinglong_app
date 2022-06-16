@@ -26,20 +26,20 @@ class TaskBean {
 
   TaskBean(
       {this.name,
-        this.command,
-        this.schedule,
-        this.saved,
-        this.sId,
-        this.created,
-        this.status,
-        this.timestamp,
-        this.isSystem,
-        this.isDisabled,
-        this.logPath,
-        this.isPinned,
-        this.lastExecutionTime,
-        this.lastRunningTime,
-        this.pid});
+      this.command,
+      this.schedule,
+      this.saved,
+      this.sId,
+      this.created,
+      this.status,
+      this.timestamp,
+      this.isSystem,
+      this.isDisabled,
+      this.logPath,
+      this.isPinned,
+      this.lastExecutionTime,
+      this.lastRunningTime,
+      this.pid});
 
   get nId => _id;
 
@@ -51,7 +51,9 @@ class TaskBean {
       saved = json['saved'];
       id = json['id'];
       _id = json['_id'];
-      sId = json.containsKey('_id') ? json['_id'].toString() : (json.containsKey('id') ? json['id'].toString() : "");
+      sId = json.containsKey('_id')
+          ? json['_id'].toString()
+          : (json.containsKey('id') ? json['id'].toString() : "");
       created = int.tryParse(json['created'].toString());
       status = json['status'];
       timestamp = json['timestamp'].toString();

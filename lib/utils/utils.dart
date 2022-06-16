@@ -9,6 +9,7 @@ class Utils {
   static bool isUpperVersion() {
     return systemBean.isUpperVersion();
   }
+
   static bool isUpperVersion2_12_2() {
     return systemBean.isUpperVersion2_12_2();
   }

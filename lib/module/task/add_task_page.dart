@@ -207,8 +207,11 @@ class _AddTaskPageState extends ConsumerState<AddTaskPage> {
     taskBean.command = _commandController.text;
     taskBean.schedule = _cronController.text;
     HttpResponse<NullResponse> response = await Api.addTask(
-        _nameController.text, _commandController.text, _cronController.text,
-        id: taskBean.id,);
+      _nameController.text,
+      _commandController.text,
+      _cronController.text,
+      id: taskBean.id,
+    );
 
     if (response.success) {
       (widget.taskBean?.sId == null) ? "新增成功" : "修改成功".toast();

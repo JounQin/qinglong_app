@@ -24,7 +24,9 @@ class BaseStateWidget<T extends BaseViewModel> extends ConsumerStatefulWidget {
   _BaseStateWidgetState<T> createState() => _BaseStateWidgetState<T>();
 }
 
-class _BaseStateWidgetState<T extends BaseViewModel> extends ConsumerState<BaseStateWidget<T>> with LazyLoadState<BaseStateWidget<T>> {
+class _BaseStateWidgetState<T extends BaseViewModel>
+    extends ConsumerState<BaseStateWidget<T>>
+    with LazyLoadState<BaseStateWidget<T>> {
   @override
   Widget build(BuildContext context) {
     var viewModel = ref.watch<T>(widget.model);

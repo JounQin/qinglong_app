@@ -64,13 +64,17 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (context, index) {
-                      if (index == getIt<UserInfoViewModel>().historyAccounts.length) {
+                      if (index ==
+                          getIt<UserInfoViewModel>().historyAccounts.length) {
                         return addAccount();
                       }
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
-                          color: ref.watch(themeProvider).themeColor.settingBordorColor(),
+                          color: ref
+                              .watch(themeProvider)
+                              .themeColor
+                              .settingBordorColor(),
                           child: buildCell(index),
                         ),
                       );
@@ -80,7 +84,8 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
                         height: 10,
                       );
                     },
-                    itemCount: getIt<UserInfoViewModel>().historyAccounts.length + 1),
+                    itemCount:
+                        getIt<UserInfoViewModel>().historyAccounts.length + 1),
               ),
             ],
           ),
@@ -108,31 +113,34 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
       ),
       trailing: index == 0
           ? Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 5,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(color: ref.watch(themeProvider).primaryColor, width: 1),
-        ),
-        child: Text(
-          "已登录",
-          style: TextStyle(color: ref.watch(themeProvider).primaryColor, fontSize: 12),
-        ),
-      )
+              padding: const EdgeInsets.symmetric(
+                horizontal: 5,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                    color: ref.watch(themeProvider).primaryColor, width: 1),
+              ),
+              child: Text(
+                "已登录",
+                style: TextStyle(
+                    color: ref.watch(themeProvider).primaryColor, fontSize: 12),
+              ),
+            )
           : (isLoginingHost.isNotEmpty
-          ? SizedBox(
-        width: 15,
-        height: 15,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: ref.watch(themeProvider).primaryColor,
-        ),
-      )
-          : const SizedBox.shrink()),
+              ? SizedBox(
+                  width: 15,
+                  height: 15,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: ref.watch(themeProvider).primaryColor,
+                  ),
+                )
+              : const SizedBox.shrink()),
     );
 
-    if (getIt<UserInfoViewModel>().historyAccounts[index].host == getIt<UserInfoViewModel>().host) {
+    if (getIt<UserInfoViewModel>().historyAccounts[index].host ==
+        getIt<UserInfoViewModel>().host) {
       return child;
     }
 
@@ -146,7 +154,8 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
             backgroundColor: Colors.red,
             flex: 1,
             onPressed: (_) {
-              getIt<UserInfoViewModel>().removeHistoryAccount(getIt<UserInfoViewModel>().historyAccounts[index].host);
+              getIt<UserInfoViewModel>().removeHistoryAccount(
+                  getIt<UserInfoViewModel>().historyAccounts[index].host);
               setState(() {});
             },
             foregroundColor: Colors.white,
@@ -181,7 +190,8 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
 
   void dealLoginResponse(int response) {
     if (response == LoginHelper.success) {
-      Navigator.of(context).pushNamedAndRemoveUntil(Routes.routeHomePage, (_) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(Routes.routeHomePage, (_) => false);
     } else if (response == LoginHelper.failed) {
       loginFailed();
     } else {
@@ -201,58 +211,58 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
     showCupertinoDialog(
         context: context,
         builder: (_) => CupertinoAlertDialog(
-          title: const Text("两步验证"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Material(
-                color: Colors.transparent,
-                child: TextField(
-                  onChanged: (value) {
-                    twoFact = value;
-                  },
-                  maxLines: 1,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    hintText: "请输入code",
+              title: const Text("两步验证"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Material(
+                    color: Colors.transparent,
+                    child: TextField(
+                      onChanged: (value) {
+                        twoFact = value;
+                      },
+                      maxLines: 1,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        hintText: "请输入code",
+                      ),
+                      autofocus: true,
+                    ),
                   ),
-                  autofocus: true,
-                ),
+                ],
               ),
-            ],
-          ),
-          actions: [
-            CupertinoDialogAction(
-              child: const Text(
-                "取消",
-                style: TextStyle(
-                  color: Color(0xff999999),
+              actions: [
+                CupertinoDialogAction(
+                  child: const Text(
+                    "取消",
+                    style: TextStyle(
+                      color: Color(0xff999999),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                 ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            CupertinoDialogAction(
-              child: Text(
-                "确定",
-                style: TextStyle(
-                  color: ref.watch(themeProvider).primaryColor,
+                CupertinoDialogAction(
+                  child: Text(
+                    "确定",
+                    style: TextStyle(
+                      color: ref.watch(themeProvider).primaryColor,
+                    ),
+                  ),
+                  onPressed: () async {
+                    Navigator.of(context).pop(true);
+                    if (helper != null) {
+                      var response = await helper!.loginTwice(twoFact);
+                      dealLoginResponse(response);
+                    } else {
+                      "状态异常".toast();
+                    }
+                  },
                 ),
-              ),
-              onPressed: () async {
-                Navigator.of(context).pop(true);
-                if (helper != null) {
-                  var response = await helper!.loginTwice(twoFact);
-                  dealLoginResponse(response);
-                } else {
-                  "状态异常".toast();
-                }
-              },
-            ),
-          ],
-        )).then((value) {
+              ],
+            )).then((value) {
       if (value == null) {
         isLoginingHost = "";
         setState(() {});
@@ -266,7 +276,7 @@ class _ChangeAccountPageState extends ConsumerState<ChangeAccountPage> {
       onTap: () {
         Navigator.of(context).pushNamedAndRemoveUntil(
           Routes.routeLogin,
-              (_) => false,
+          (_) => false,
           arguments: true,
         );
       },

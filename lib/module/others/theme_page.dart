@@ -122,7 +122,8 @@ class _ThemePageState extends ConsumerState<ThemePage> {
                                     ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -144,7 +145,8 @@ class _ThemePageState extends ConsumerState<ThemePage> {
                                                           child:
                                                               CircularProgressIndicator(
                                                             strokeWidth: 2,
-                                                            color: _primaryColor,
+                                                            color:
+                                                                _primaryColor,
                                                           ),
                                                         ),
                                                   SizedBox(
@@ -158,8 +160,8 @@ class _ThemePageState extends ConsumerState<ThemePage> {
                                                       child: Text(
                                                         "示例名称",
                                                         maxLines: 1,
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                         style: TextStyle(
                                                           overflow: TextOverflow
                                                               .ellipsis,
@@ -182,7 +184,8 @@ class _ThemePageState extends ConsumerState<ThemePage> {
                                                 "上午10：00",
                                                 maxLines: 1,
                                                 style: TextStyle(
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   color: ref
                                                       .watch(themeProvider)
                                                       .themeColor
@@ -216,7 +219,8 @@ class _ThemePageState extends ConsumerState<ThemePage> {
                                                 "10 1-12/2 * * *",
                                                 maxLines: 1,
                                                 style: TextStyle(
-                                                  overflow: TextOverflow.ellipsis,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   color: ref
                                                       .watch(themeProvider)
                                                       .themeColor

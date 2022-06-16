@@ -7,8 +7,7 @@ import '../userinfo_viewmodel.dart';
 class TokenInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.headers["User-Agent"] =
-        "qinglong_client";
+    options.headers["User-Agent"] = "qinglong_client";
 
     options.headers["Content-Type"] = "application/json;charset=UTF-8";
 

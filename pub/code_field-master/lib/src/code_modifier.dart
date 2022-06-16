@@ -19,7 +19,8 @@ abstract class CodeModifier {
     );
   }
 
-  TextEditingValue? updateString(String text, TextSelection sel, EditorParams params);
+  TextEditingValue? updateString(
+      String text, TextSelection sel, EditorParams params);
 }
 
 class IntendModifier extends CodeModifier {
@@ -30,7 +31,8 @@ class IntendModifier extends CodeModifier {
   }) : super('\n');
 
   @override
-  TextEditingValue? updateString(String text, TextSelection sel, EditorParams params) {
+  TextEditingValue? updateString(
+      String text, TextSelection sel, EditorParams params) {
     var spacesCount = 0;
     var braceCount = 0;
     for (var k = min(sel.start, text.length) - 1; k >= 0; k--) {
@@ -53,7 +55,8 @@ class CloseBlockModifier extends CodeModifier {
   const CloseBlockModifier() : super('}');
 
   @override
-  TextEditingValue? updateString(String text, TextSelection sel, EditorParams params) {
+  TextEditingValue? updateString(
+      String text, TextSelection sel, EditorParams params) {
     int spaceCount = 0;
     for (var k = min(sel.start, text.length) - 1; k >= 0; k--) {
       if (text[k] == "\n") break;
@@ -63,7 +66,8 @@ class CloseBlockModifier extends CodeModifier {
       }
       spaceCount += 1;
     }
-    if (spaceCount >= params.tabSpaces) return replace(text, sel.start - params.tabSpaces, sel.end, "}");
+    if (spaceCount >= params.tabSpaces)
+      return replace(text, sel.start - params.tabSpaces, sel.end, "}");
     return null;
   }
 }
@@ -72,7 +76,8 @@ class TabModifier extends CodeModifier {
   const TabModifier() : super('\t');
 
   @override
-  TextEditingValue? updateString(String text, TextSelection sel, EditorParams params) {
+  TextEditingValue? updateString(
+      String text, TextSelection sel, EditorParams params) {
     final tmp = replace(text, sel.start, sel.end, " " * params.tabSpaces);
     return tmp;
   }

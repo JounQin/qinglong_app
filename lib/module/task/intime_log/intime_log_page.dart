@@ -39,8 +39,7 @@ class _InTimeLogPageState extends State<InTimeLogPage>
     if (!canRequest) return;
     if (isRequest) return;
     isRequest = true;
-    HttpResponse<String> response =
-    await Api.inTimeLog(widget.cronId);
+    HttpResponse<String> response = await Api.inTimeLog(widget.cronId);
     if (response.success) {
       content = response.bean;
       setState(() {});
@@ -161,7 +160,7 @@ class _InTimeLogPageState extends State<InTimeLogPage>
     if (widget.needTimer) {
       _timer = Timer.periodic(
         const Duration(seconds: 2),
-            (timer) {
+        (timer) {
           getLogData();
         },
       );

@@ -12,7 +12,14 @@ class EnvBean {
   String? name;
   String? remarks;
 
-  EnvBean({this.value, this.sId, this.created, this.status, this.timestamp, this.name, this.remarks});
+  EnvBean(
+      {this.value,
+      this.sId,
+      this.created,
+      this.status,
+      this.timestamp,
+      this.name,
+      this.remarks});
 
   get nId => _id;
 
@@ -20,7 +27,9 @@ class EnvBean {
     value = json['value'];
     id = json['id'];
     _id = json['_id'];
-    sId = json.containsKey('_id') ? json['_id'].toString() : (json.containsKey('id') ? json['id'].toString() : "");
+    sId = json.containsKey('_id')
+        ? json['_id'].toString()
+        : (json.containsKey('id') ? json['id'].toString() : "");
     created = int.tryParse(json['created'].toString());
     status = json['status'];
     timestamp = json['timestamp'];

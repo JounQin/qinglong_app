@@ -33,7 +33,8 @@ class ScriptDetailPage extends ConsumerStatefulWidget {
   _ScriptDetailPageState createState() => _ScriptDetailPageState();
 }
 
-class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLoadState<ScriptDetailPage> {
+class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage>
+    with LazyLoadState<ScriptDetailPage> {
   String? content;
   CodeController? _codeController;
   GlobalKey<CodeFieldState> codeFieldKey = GlobalKey();
@@ -42,7 +43,8 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLo
   bool buttonshow = false;
 
   void scrollToTop() {
-    codeFieldKey.currentState?.getCodeScroll()?.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.linear);
+    codeFieldKey.currentState?.getCodeScroll()?.animateTo(0,
+        duration: const Duration(milliseconds: 200), curve: Curves.linear);
   }
 
   void floatingButtonVisibility() {
@@ -164,7 +166,8 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLo
                     ),
                     onPressed: () async {
                       Navigator.of(context).pop();
-                      HttpResponse<NullResponse> result = await Api.delScript(widget.title, widget.path ?? "");
+                      HttpResponse<NullResponse> result =
+                          await Api.delScript(widget.title, widget.path ?? "");
                       if (result.success) {
                         "删除成功".toast();
                         Navigator.of(context).pop(true);
@@ -209,7 +212,8 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLo
         },
         theme: ref.watch(themeProvider).themeColor.codeEditorTheme(),
         stringMap: {
-          "export": const TextStyle(fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
+          "export": const TextStyle(
+              fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
         },
       );
     }
@@ -296,31 +300,34 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLo
       ),
       body: content == null
           ? const Center(
-        child: CupertinoActivityIndicator(),
-      )
+              child: CupertinoActivityIndicator(),
+            )
           : SafeArea(
-        top: false,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: SpUtil.getBool(spShowLine, defValue: false) ? 0 : 10,
-          ),
-          child: CodeField(
-            key: codeFieldKey,
-            controller: _codeController!,
-            expands: true,
-            readOnly: true,
-            wrap: SpUtil.getBool(spShowLine, defValue: false) ? false : true,
-            hideColumn: !SpUtil.getBool(spShowLine, defValue: false),
-            lineNumberStyle: LineNumberStyle(
-              textStyle: TextStyle(
-                color: ref.watch(themeProvider).themeColor.descColor(),
-                fontSize: 12,
+              top: false,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal:
+                      SpUtil.getBool(spShowLine, defValue: false) ? 0 : 10,
+                ),
+                child: CodeField(
+                  key: codeFieldKey,
+                  controller: _codeController!,
+                  expands: true,
+                  readOnly: true,
+                  wrap: SpUtil.getBool(spShowLine, defValue: false)
+                      ? false
+                      : true,
+                  hideColumn: !SpUtil.getBool(spShowLine, defValue: false),
+                  lineNumberStyle: LineNumberStyle(
+                    textStyle: TextStyle(
+                      color: ref.watch(themeProvider).themeColor.descColor(),
+                      fontSize: 12,
+                    ),
+                  ),
+                  background: Colors.white,
+                ),
               ),
             ),
-            background: Colors.white,
-          ),
-        ),
-      ),
     );
   }
 
@@ -337,8 +344,10 @@ class _ScriptDetailPageState extends ConsumerState<ScriptDetailPage> with LazyLo
         const Duration(
           seconds: 1,
         ),
-            () {
-          codeFieldKey.currentState?.getCodeScroll()?.addListener(floatingButtonVisibility);
+        () {
+          codeFieldKey.currentState
+              ?.getCodeScroll()
+              ?.addListener(floatingButtonVisibility);
         },
       );
     } else {

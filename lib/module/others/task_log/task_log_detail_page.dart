@@ -24,7 +24,8 @@ class TaskLogDetailPage extends ConsumerStatefulWidget {
   _TaskLogDetailPageState createState() => _TaskLogDetailPageState();
 }
 
-class _TaskLogDetailPageState extends ConsumerState<TaskLogDetailPage> with LazyLoadState<TaskLogDetailPage> {
+class _TaskLogDetailPageState extends ConsumerState<TaskLogDetailPage>
+    with LazyLoadState<TaskLogDetailPage> {
   String? content;
 
   @override
@@ -40,15 +41,15 @@ class _TaskLogDetailPageState extends ConsumerState<TaskLogDetailPage> with Lazy
       body: content == null
           ? const Center(child: CupertinoActivityIndicator())
           : Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 15,
-        ),
-        child: SelectableText(
-          (content == null || content!.isEmpty) ? "暂无数据" : content!,
-          selectionHeightStyle: BoxHeightStyle.max,
-          selectionWidthStyle: BoxWidthStyle.max,
-        ),
-      ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
+              child: SelectableText(
+                (content == null || content!.isEmpty) ? "暂无数据" : content!,
+                selectionHeightStyle: BoxHeightStyle.max,
+                selectionWidthStyle: BoxWidthStyle.max,
+              ),
+            ),
     );
   }
 

@@ -47,8 +47,8 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
     });
   }
 
-  Future<void> notifyICloud(BuildContext context, String? title, String? content) async {
-  }
+  Future<void> notifyICloud(
+      BuildContext context, String? title, String? content) async {}
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,8 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
       },
       theme: ref.watch(themeProvider).themeColor.codeEditorTheme(),
       stringMap: {
-        "export": const TextStyle(fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
+        "export": const TextStyle(
+            fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
       },
     );
     return Scaffold(
@@ -122,10 +123,10 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
                 ...operateList
                     .map(
                       (e) => PopupMenuItem<String>(
-                    child: Text(e),
-                    value: e,
-                  ),
-                )
+                        child: Text(e),
+                        value: e,
+                      ),
+                    )
                     .toList(),
               ],
               child: const Center(
@@ -137,7 +138,8 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
           ),
           InkWell(
             onTap: () async {
-              HttpResponse<NullResponse> response = await Api.saveFile(widget.title, result);
+              HttpResponse<NullResponse> response =
+                  await Api.saveFile(widget.title, result);
               await notifyICloud(context, widget.title, result);
               if (response.success) {
                 "提交成功".toast();
@@ -226,7 +228,8 @@ class _ConfigEditPageState extends ConsumerState<ConfigEditPage> {
       }
     } catch (e) {}
 
-    TextEditingController controller = TextEditingController(text: defaultValue.replaceAll("\"", "").replaceAll("'", ""));
+    TextEditingController controller = TextEditingController(
+        text: defaultValue.replaceAll("\"", "").replaceAll("'", ""));
     showCupertinoDialog(
       useRootNavigator: false,
       context: context,

@@ -15,7 +15,6 @@ class EnvViewModel extends BaseViewModel {
   List<EnvBean> disabledList = [];
   List<EnvBean> enabledList = [];
 
-
   Future<void> loadData([isLoading = true]) async {
     if (isLoading && list.isEmpty) {
       loading(notify: true);
@@ -23,12 +22,12 @@ class EnvViewModel extends BaseViewModel {
 
     HttpResponse<List<EnvBean>> result = await Api.envs("");
 
-
     if (result.success && result.bean != null) {
       list.clear();
       list.addAll(result.bean!);
       disabledList.clear();
-      disabledList.addAll(list.where((element) => element.status == 1).toList());
+      disabledList
+          .addAll(list.where((element) => element.status == 1).toList());
       enabledList.clear();
       enabledList.addAll(list.where((element) => element.status == 0).toList());
       success();

@@ -26,7 +26,8 @@ class UserInfoViewModel {
     _useSecertLogined = SpUtil.getBool(spSecretLogined, defValue: false);
     _host = SpUtil.getString(spHost, defValue: '');
 
-    List<dynamic>? tempList = jsonDecode(SpUtil.getString(spLoginHistory, defValue: '[]'));
+    List<dynamic>? tempList =
+        jsonDecode(SpUtil.getString(spLoginHistory, defValue: '[]'));
 
     if (tempList != null && tempList.isNotEmpty) {
       for (Map<String, dynamic> value in tempList) {
@@ -40,7 +41,8 @@ class UserInfoViewModel {
     SpUtil.putString(spUserInfo, token);
   }
 
-  void updateUserName(String host, String userName, String password, bool secretLogin) {
+  void updateUserName(
+      String host, String userName, String password, bool secretLogin) {
     updateHost(host);
     _useSecretLogin(secretLogin);
     _userName = userName;
@@ -93,7 +95,13 @@ class UserInfoViewModel {
 
     historyAccounts.removeWhere((element) => element.host == _host);
 
-    historyAccounts.insert(0, UserInfoBean(userName: _userName, password: _passWord, useSecretLogined: _useSecertLogined, host: _host));
+    historyAccounts.insert(
+        0,
+        UserInfoBean(
+            userName: _userName,
+            password: _passWord,
+            useSecretLogined: _useSecertLogined,
+            host: _host));
 
     while (historyAccounts.length > 3) {
       historyAccounts.removeLast();
@@ -117,7 +125,8 @@ class UserInfoBean {
   bool useSecretLogined = false;
   String? host;
 
-  UserInfoBean({this.userName, this.password, this.useSecretLogined = false, this.host});
+  UserInfoBean(
+      {this.userName, this.password, this.useSecretLogined = false, this.host});
 
   UserInfoBean.fromJson(Map<String, dynamic> json) {
     userName = json['userName'];

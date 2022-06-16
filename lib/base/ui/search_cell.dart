@@ -17,7 +17,6 @@ class SearchCell extends ConsumerStatefulWidget {
 }
 
 class _SearchCellState extends ConsumerState<SearchCell> {
-
   @override
   void initState() {
     super.initState();
@@ -35,9 +34,7 @@ class _SearchCellState extends ConsumerState<SearchCell> {
       ),
       onSuffixTap: () {
         widget.controller.text = "";
-        setState(() {
-
-        });
+        setState(() {});
       },
       controller: widget.controller,
       padding: const EdgeInsets.symmetric(

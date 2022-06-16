@@ -67,9 +67,17 @@ class _TaskPageState extends ConsumerState<TaskPage> {
               }
               TaskBean item = list[index - 1];
               if (_searchController.text.isEmpty ||
-                  (item.name?.toLowerCase().contains(_searchController.text.toLowerCase()) ?? false) ||
-                  (item.command?.toLowerCase().contains(_searchController.text.toLowerCase()) ?? false) ||
-                  (item.schedule?.contains(_searchController.text.toLowerCase()) ?? false)) {
+                  (item.name
+                          ?.toLowerCase()
+                          .contains(_searchController.text.toLowerCase()) ??
+                      false) ||
+                  (item.command
+                          ?.toLowerCase()
+                          .contains(_searchController.text.toLowerCase()) ??
+                      false) ||
+                  (item.schedule
+                          ?.contains(_searchController.text.toLowerCase()) ??
+                      false)) {
                 return TaskItemCell(item, ref);
               } else {
                 return const SizedBox.shrink();
@@ -80,9 +88,17 @@ class _TaskPageState extends ConsumerState<TaskPage> {
               if (index == 0) return const SizedBox.shrink();
               TaskBean item = list[index - 1];
               if (_searchController.text.isEmpty ||
-                  (item.name?.toLowerCase().contains(_searchController.text.toLowerCase()) ?? false) ||
-                  (item.command?.toLowerCase().contains(_searchController.text.toLowerCase()) ?? false) ||
-                  (item.schedule?.contains(_searchController.text.toLowerCase()) ?? false)) {
+                  (item.name
+                          ?.toLowerCase()
+                          .contains(_searchController.text.toLowerCase()) ??
+                      false) ||
+                  (item.command
+                          ?.toLowerCase()
+                          .contains(_searchController.text.toLowerCase()) ??
+                      false) ||
+                  (item.schedule
+                          ?.contains(_searchController.text.toLowerCase()) ??
+                      false)) {
                 return Container(
                   color: ref.watch(themeProvider).themeColor.settingBgColor(),
                   child: const Divider(
@@ -130,7 +146,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                   child: Text(
                     TaskViewModel.allStr,
                     style: TextStyle(
-                      color: currentState == TaskViewModel.allStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == TaskViewModel.allStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -140,8 +158,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                   child: Text(
                     TaskViewModel.runningStr,
                     style: TextStyle(
-                      color:
-                      currentState == TaskViewModel.runningStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == TaskViewModel.runningStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -151,7 +170,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                   child: Text(
                     TaskViewModel.neverStr,
                     style: TextStyle(
-                      color: currentState == TaskViewModel.neverStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == TaskViewModel.neverStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -165,7 +186,10 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                         style: TextStyle(
                           color: currentState == TaskViewModel.notScriptStr
                               ? ref.watch(themeProvider).primaryColor
-                              : ref.watch(themeProvider).themeColor.titleColor(),
+                              : ref
+                                  .watch(themeProvider)
+                                  .themeColor
+                                  .titleColor(),
                           fontSize: 14,
                         ),
                       ),
@@ -178,8 +202,9 @@ class _TaskPageState extends ConsumerState<TaskPage> {
                     TaskViewModel.disableStr,
                     style: TextStyle(
                       fontSize: 14,
-                      color:
-                      currentState == TaskViewModel.disableStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == TaskViewModel.disableStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                     ),
                   ),
                   value: TaskViewModel.disableStr,
@@ -236,7 +261,9 @@ class TaskItemCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: bean.isPinned == 1 ? ref.watch(themeProvider).themeColor.pinColor() : ref.watch(themeProvider).themeColor.settingBgColor(),
+      color: bean.isPinned == 1
+          ? ref.watch(themeProvider).themeColor.pinColor()
+          : ref.watch(themeProvider).themeColor.settingBgColor(),
       child: Slidable(
         key: ValueKey(bean.sId),
         endActionPane: ActionPane(
@@ -247,7 +274,8 @@ class TaskItemCell extends StatelessWidget {
               backgroundColor: const Color(0xff5D5E70),
               onPressed: (_) {
                 WidgetsBinding.instance.endOfFrame.then((timeStamp) {
-                  Navigator.of(context).pushNamed(Routes.routeAddTask, arguments: bean);
+                  Navigator.of(context)
+                      .pushNamed(Routes.routeAddTask, arguments: bean);
                 });
               },
               foregroundColor: Colors.white,
@@ -259,7 +287,9 @@ class TaskItemCell extends StatelessWidget {
                 pinTask(context);
               },
               foregroundColor: Colors.white,
-              icon: (bean.isPinned ?? 0) == 0 ? CupertinoIcons.pin : CupertinoIcons.pin_slash,
+              icon: (bean.isPinned ?? 0) == 0
+                  ? CupertinoIcons.pin
+                  : CupertinoIcons.pin_slash,
             ),
             SlidableAction(
               backgroundColor: const Color(0xffA356D6),
@@ -267,7 +297,9 @@ class TaskItemCell extends StatelessWidget {
                 enableTask(context);
               },
               foregroundColor: Colors.white,
-              icon: bean.isDisabled! == 0 ? Icons.dnd_forwardslash : Icons.check_circle_outline_sharp,
+              icon: bean.isDisabled! == 0
+                  ? Icons.dnd_forwardslash
+                  : Icons.check_circle_outline_sharp,
             ),
             SlidableAction(
               backgroundColor: const Color(0xffEA4D3E),
@@ -299,7 +331,9 @@ class TaskItemCell extends StatelessWidget {
                 }
               },
               foregroundColor: Colors.white,
-              icon: bean.status! == 1 ? CupertinoIcons.memories : CupertinoIcons.stop_circle,
+              icon: bean.status! == 1
+                  ? CupertinoIcons.memories
+                  : CupertinoIcons.stop_circle,
             ),
             SlidableAction(
               backgroundColor: const Color(0xff606467),
@@ -317,10 +351,13 @@ class TaskItemCell extends StatelessWidget {
           ],
         ),
         child: Material(
-          color: bean.isPinned == 1 ? ref.watch(themeProvider).themeColor.pinColor() : ref.watch(themeProvider).themeColor.settingBgColor(),
+          color: bean.isPinned == 1
+              ? ref.watch(themeProvider).themeColor.pinColor()
+              : ref.watch(themeProvider).themeColor.settingBgColor(),
           child: InkWell(
             onTap: () {
-              Navigator.of(context).pushNamed(Routes.routeTaskDetail, arguments: bean);
+              Navigator.of(context)
+                  .pushNamed(Routes.routeTaskDetail, arguments: bean);
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
@@ -356,7 +393,10 @@ class TaskItemCell extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     overflow: TextOverflow.ellipsis,
-                                    color: ref.watch(themeProvider).themeColor.titleColor(),
+                                    color: ref
+                                        .watch(themeProvider)
+                                        .themeColor
+                                        .titleColor(),
                                     fontSize: 16,
                                   ),
                                 ),
@@ -392,11 +432,16 @@ class TaskItemCell extends StatelessWidget {
                       Material(
                         color: Colors.transparent,
                         child: Text(
-                          (bean.lastExecutionTime == null || bean.lastExecutionTime == 0) ? "-" : Utils.formatMessageTime(bean.lastExecutionTime!),
+                          (bean.lastExecutionTime == null ||
+                                  bean.lastExecutionTime == 0)
+                              ? "-"
+                              : Utils.formatMessageTime(
+                                  bean.lastExecutionTime!),
                           maxLines: 1,
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
-                            color: ref.watch(themeProvider).themeColor.descColor(),
+                            color:
+                                ref.watch(themeProvider).themeColor.descColor(),
                             fontSize: 12,
                           ),
                         ),

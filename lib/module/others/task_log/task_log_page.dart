@@ -19,7 +19,8 @@ class TaskLogPage extends ConsumerStatefulWidget {
   _TaskLogPageState createState() => _TaskLogPageState();
 }
 
-class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<TaskLogPage> {
+class _TaskLogPageState extends ConsumerState<TaskLogPage>
+    with LazyLoadState<TaskLogPage> {
   List<TaskLogBean> list = [];
   final TextEditingController _searchController = TextEditingController();
 
@@ -63,7 +64,8 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
                   return searchCell(ref);
                 }
                 TaskLogBean item = list[index - 1];
-                if (_searchController.text.isNotEmpty && !(item.name?.contains(_searchController.text) ?? false)) {
+                if (_searchController.text.isNotEmpty &&
+                    !(item.name?.contains(_searchController.text) ?? false)) {
                   return const SizedBox.shrink();
                 }
                 return ColoredBox(
@@ -73,7 +75,10 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
                           title: Text(
                             item.name ?? "",
                             style: TextStyle(
-                              color: ref.watch(themeProvider).themeColor.titleColor(),
+                              color: ref
+                                  .watch(themeProvider)
+                                  .themeColor
+                                  .titleColor(),
                               fontSize: 16,
                             ),
                           ),
@@ -81,15 +86,20 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
                               ? item.files!
                                   .map((e) => ListTile(
                                         onTap: () {
-                                          Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
-                                            "path": item.name,
-                                            "title": e,
-                                          });
+                                          Navigator.of(context).pushNamed(
+                                              Routes.routeTaskLogDetail,
+                                              arguments: {
+                                                "path": item.name,
+                                                "title": e,
+                                              });
                                         },
                                         title: Text(
                                           e,
                                           style: TextStyle(
-                                            color: ref.watch(themeProvider).themeColor.titleColor(),
+                                            color: ref
+                                                .watch(themeProvider)
+                                                .themeColor
+                                                .titleColor(),
                                             fontSize: 14,
                                           ),
                                         ),
@@ -98,15 +108,20 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
                               : (item.children ?? [])
                                   .map((e) => ListTile(
                                         onTap: () {
-                                          Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
-                                            "path": item.name,
-                                            "title": e.title,
-                                          });
+                                          Navigator.of(context).pushNamed(
+                                              Routes.routeTaskLogDetail,
+                                              arguments: {
+                                                "path": item.name,
+                                                "title": e.title,
+                                              });
                                         },
                                         title: Text(
                                           e.title ?? "",
                                           style: TextStyle(
-                                            color: ref.watch(themeProvider).themeColor.titleColor(),
+                                            color: ref
+                                                .watch(themeProvider)
+                                                .themeColor
+                                                .titleColor(),
                                             fontSize: 14,
                                           ),
                                         ),
@@ -119,15 +134,20 @@ class _TaskLogPageState extends ConsumerState<TaskLogPage> with LazyLoadState<Ta
                               "该文件夹为空".toast();
                               return;
                             }
-                            Navigator.of(context).pushNamed(Routes.routeTaskLogDetail, arguments: {
-                              "path": "",
-                              "title": item.name,
-                            });
+                            Navigator.of(context).pushNamed(
+                                Routes.routeTaskLogDetail,
+                                arguments: {
+                                  "path": "",
+                                  "title": item.name,
+                                });
                           },
                           title: Text(
                             item.name ?? "",
                             style: TextStyle(
-                              color: ref.watch(themeProvider).themeColor.titleColor(),
+                              color: ref
+                                  .watch(themeProvider)
+                                  .themeColor
+                                  .titleColor(),
                               fontSize: 16,
                             ),
                           ),

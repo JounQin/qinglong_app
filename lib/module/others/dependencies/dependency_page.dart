@@ -21,7 +21,8 @@ class DependencyPage extends StatefulWidget {
   _DependcyPageState createState() => _DependcyPageState();
 }
 
-class _DependcyPageState extends State<DependencyPage> with TickerProviderStateMixin {
+class _DependcyPageState extends State<DependencyPage>
+    with TickerProviderStateMixin {
   List<DepedencyEnum> types = [];
 
   TabController? _tabController;
@@ -125,7 +126,9 @@ class _DependcyPageState extends State<DependencyPage> with TickerProviderStateM
                           itemCount: list.length,
                         ),
                         onRefresh: () {
-                          return model.loadData(types[_tabController!.index].name.toLowerCase(), false);
+                          return model.loadData(
+                              types[_tabController!.index].name.toLowerCase(),
+                              false);
                         },
                       );
                     },
@@ -222,7 +225,10 @@ class DependencyCell extends ConsumerWidget {
                             maxLines: 1,
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
-                              color: ref.watch(themeProvider).themeColor.titleColor(),
+                              color: ref
+                                  .watch(themeProvider)
+                                  .themeColor
+                                  .titleColor(),
                               fontSize: 18,
                             ),
                           ),
@@ -255,11 +261,16 @@ class DependencyCell extends ConsumerWidget {
                             child: Material(
                               color: Colors.transparent,
                               child: Text(
-                                (bean.created == null || bean.created == 0) ? "-" : Utils.formatMessageTime(bean.created!),
+                                (bean.created == null || bean.created == 0)
+                                    ? "-"
+                                    : Utils.formatMessageTime(bean.created!),
                                 maxLines: 1,
                                 style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
-                                  color: ref.watch(themeProvider).themeColor.descColor(),
+                                  color: ref
+                                      .watch(themeProvider)
+                                      .themeColor
+                                      .descColor(),
                                   fontSize: 12,
                                 ),
                               ),
@@ -357,7 +368,9 @@ class DependencyCell extends ConsumerWidget {
             ),
             onPressed: () {
               Navigator.of(context).pop();
-              ref.read(dependencyProvider).del(type.name.toLowerCase(), sId ?? "");
+              ref
+                  .read(dependencyProvider)
+                  .del(type.name.toLowerCase(), sId ?? "");
             },
           ),
         ],

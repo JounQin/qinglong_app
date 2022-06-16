@@ -83,7 +83,8 @@ class _EnvPageState extends State<EnvPage> {
                           ],
                         )
                       : ReorderableListView(
-                          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
                           header: searchCell(context, ref),
                           onReorder: (int oldIndex, int newIndex) {
                             if (list.length != model.list.length) {
@@ -97,9 +98,11 @@ class _EnvPageState extends State<EnvPage> {
                                 if (newIndex > oldIndex) {
                                   newIndex -= 1;
                                 }
-                                final EnvBean item = model.list.removeAt(oldIndex);
+                                final EnvBean item =
+                                    model.list.removeAt(oldIndex);
                                 model.list.insert(newIndex, item);
-                                model.update(item.sId ?? "", newIndex, oldIndex);
+                                model.update(
+                                    item.sId ?? "", newIndex, oldIndex);
                               },
                             );
                           },
@@ -145,7 +148,9 @@ class _EnvPageState extends State<EnvPage> {
                   child: Text(
                     EnvViewModel.allStr,
                     style: TextStyle(
-                      color: currentState == EnvViewModel.allStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == EnvViewModel.allStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -155,7 +160,9 @@ class _EnvPageState extends State<EnvPage> {
                   child: Text(
                     EnvViewModel.enabledStr,
                     style: TextStyle(
-                      color: currentState == EnvViewModel.enabledStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == EnvViewModel.enabledStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -165,8 +172,9 @@ class _EnvPageState extends State<EnvPage> {
                   child: Text(
                     EnvViewModel.disabledStr,
                     style: TextStyle(
-                      color:
-                          currentState == EnvViewModel.disabledStr ? ref.watch(themeProvider).primaryColor : ref.watch(themeProvider).themeColor.titleColor(),
+                      color: currentState == EnvViewModel.disabledStr
+                          ? ref.watch(themeProvider).primaryColor
+                          : ref.watch(themeProvider).themeColor.titleColor(),
                       fontSize: 14,
                     ),
                   ),
@@ -199,7 +207,8 @@ class EnvItemCell extends StatelessWidget {
   final int index;
   final WidgetRef ref;
 
-  const EnvItemCell(this.bean, this.index, this.ref, {Key? key}) : super(key: key);
+  const EnvItemCell(this.bean, this.index, this.ref, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +221,8 @@ class EnvItemCell extends StatelessWidget {
           SlidableAction(
             backgroundColor: const Color(0xff5D5E70),
             onPressed: (_) {
-              Navigator.of(context).pushNamed(Routes.routeAddEnv, arguments: bean);
+              Navigator.of(context)
+                  .pushNamed(Routes.routeAddEnv, arguments: bean);
             },
             foregroundColor: Colors.white,
             icon: CupertinoIcons.pencil_outline,
@@ -223,7 +233,9 @@ class EnvItemCell extends StatelessWidget {
               enableEnv(context);
             },
             foregroundColor: Colors.white,
-            icon: bean.status == 0 ? Icons.dnd_forwardslash : Icons.check_circle_outline_sharp,
+            icon: bean.status == 0
+                ? Icons.dnd_forwardslash
+                : Icons.check_circle_outline_sharp,
           ),
           SlidableAction(
             backgroundColor: const Color(0xffEA4D3E),
@@ -245,7 +257,8 @@ class EnvItemCell extends StatelessWidget {
               color: ref.watch(themeProvider).themeColor.settingBgColor(),
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.routeEnvDetail, arguments: bean);
+                  Navigator.of(context)
+                      .pushNamed(Routes.routeEnvDetail, arguments: bean);
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -272,13 +285,22 @@ class EnvItemCell extends StatelessWidget {
                                           horizontal: 5,
                                         ),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(3),
-                                          border: Border.all(color: ref.watch(themeProvider).themeColor.descColor(), width: 1),
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                          border: Border.all(
+                                              color: ref
+                                                  .watch(themeProvider)
+                                                  .themeColor
+                                                  .descColor(),
+                                              width: 1),
                                         ),
                                         child: Text(
                                           "${getIndexByIndex(context, index)}",
                                           style: TextStyle(
-                                            color: ref.watch(themeProvider).themeColor.descColor(),
+                                            color: ref
+                                                .watch(themeProvider)
+                                                .themeColor
+                                                .descColor(),
                                             fontSize: 12,
                                           ),
                                         ),
@@ -299,7 +321,10 @@ class EnvItemCell extends StatelessWidget {
                                       maxLines: 1,
                                       style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
-                                        color: ref.watch(themeProvider).themeColor.titleColor(),
+                                        color: ref
+                                            .watch(themeProvider)
+                                            .themeColor
+                                            .titleColor(),
                                         fontSize: 16,
                                       ),
                                     ),
@@ -315,7 +340,8 @@ class EnvItemCell extends StatelessWidget {
                                     ),
                                   ),
                                   child: Visibility(
-                                    visible: bean.remarks != null && bean.remarks!.isNotEmpty,
+                                    visible: bean.remarks != null &&
+                                        bean.remarks!.isNotEmpty,
                                     child: Material(
                                       color: Colors.transparent,
                                       child: Text(
@@ -324,7 +350,10 @@ class EnvItemCell extends StatelessWidget {
                                         style: TextStyle(
                                           height: 1,
                                           overflow: TextOverflow.ellipsis,
-                                          color: ref.watch(themeProvider).themeColor.descColor(),
+                                          color: ref
+                                              .watch(themeProvider)
+                                              .themeColor
+                                              .descColor(),
                                           fontSize: 12,
                                         ),
                                       ),
@@ -358,7 +387,10 @@ class EnvItemCell extends StatelessWidget {
                               maxLines: 1,
                               style: TextStyle(
                                 overflow: TextOverflow.ellipsis,
-                                color: ref.watch(themeProvider).themeColor.descColor(),
+                                color: ref
+                                    .watch(themeProvider)
+                                    .themeColor
+                                    .descColor(),
                                 fontSize: 12,
                               ),
                             ),
@@ -375,7 +407,8 @@ class EnvItemCell extends StatelessWidget {
                           maxLines: 1,
                           style: TextStyle(
                             overflow: TextOverflow.ellipsis,
-                            color: ref.watch(themeProvider).themeColor.descColor(),
+                            color:
+                                ref.watch(themeProvider).themeColor.descColor(),
                             fontSize: 12,
                           ),
                         ),

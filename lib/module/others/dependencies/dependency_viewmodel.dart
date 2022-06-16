@@ -15,7 +15,10 @@ class DependencyViewModel extends BaseViewModel {
   List<DependencyBean> linuxList = [];
 
   Future<void> loadData(String type, [bool showLoading = true]) async {
-    if (showLoading && ((type == "nodejs" && nodeJsList.isEmpty) || (type == "python3" && python3List.isEmpty) || (type == "linux" && linuxList.isEmpty))) {
+    if (showLoading &&
+        ((type == "nodejs" && nodeJsList.isEmpty) ||
+            (type == "python3" && python3List.isEmpty) ||
+            (type == "linux" && linuxList.isEmpty))) {
       loading(notify: true);
     }
 

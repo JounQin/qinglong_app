@@ -44,7 +44,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!widget.doNotLoadLocalData) {
       _hostController.text = getIt<UserInfoViewModel>().host ?? "";
       useSecretLogin = getIt<UserInfoViewModel>().useSecretLogined;
-      if (getIt<UserInfoViewModel>().userName != null && getIt<UserInfoViewModel>().userName!.isNotEmpty) {
+      if (getIt<UserInfoViewModel>().userName != null &&
+          getIt<UserInfoViewModel>().userName!.isNotEmpty) {
         if (getIt<UserInfoViewModel>().useSecretLogined) {
           _cIdController.text = getIt<UserInfoViewModel>().userName!;
         } else {
@@ -54,7 +55,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       } else {
         rememberPassword = false;
       }
-      if (getIt<UserInfoViewModel>().passWord != null && getIt<UserInfoViewModel>().passWord!.isNotEmpty) {
+      if (getIt<UserInfoViewModel>().passWord != null &&
+          getIt<UserInfoViewModel>().passWord!.isNotEmpty) {
         if (getIt<UserInfoViewModel>().useSecretLogined) {
           _cSecretController.text = getIt<UserInfoViewModel>().passWord!;
         } else {
@@ -76,7 +78,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: ref.watch(themeProvider).darkMode == true ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        value: ref.watch(themeProvider).darkMode == true
+            ? SystemUiOverlayStyle.light
+            : SystemUiOverlayStyle.dark,
         child: ColoredBox(
           color: ref.watch(themeProvider).themeColor.settingBgColor(),
           child: SingleChildScrollView(
@@ -105,7 +109,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 style: TextStyle(
                                   fontSize: 26,
                                   fontWeight: FontWeight.bold,
-                                  color: ref.watch(themeProvider).themeColor.titleColor(),
+                                  color: ref
+                                      .watch(themeProvider)
+                                      .themeColor
+                                      .titleColor(),
                                 ),
                               ),
                             ),
@@ -115,7 +122,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               if (debugBtnIsShow()) {
                                 dismissDebugBtn();
                               } else {
-                                showDebugBtn(context, btnColor: ref.watch(themeProvider).primaryColor);
+                                showDebugBtn(context,
+                                    btnColor:
+                                        ref.watch(themeProvider).primaryColor);
                               }
                               WidgetsBinding.instance.endOfFrame;
                             },
@@ -158,7 +167,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 hintText: "http://1.1.1.1:5700",
                                 hintStyle: TextStyle(
                                   fontSize: 16,
-                                  color: ref.watch(themeProvider).themeColor.descColor(),
+                                  color: ref
+                                      .watch(themeProvider)
+                                      .themeColor
+                                      .descColor(),
                                 ),
                               ),
                               autofocus: false,
@@ -216,7 +228,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         hintText: "请输入账户",
                                         hintStyle: TextStyle(
                                           fontSize: 16,
-                                          color: ref.watch(themeProvider).themeColor.descColor(),
+                                          color: ref
+                                              .watch(themeProvider)
+                                              .themeColor
+                                              .descColor(),
                                         ),
                                       ),
                                       autofocus: false,
@@ -260,7 +275,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         hintText: "请输入密码",
                                         hintStyle: TextStyle(
                                           fontSize: 16,
-                                          color: ref.watch(themeProvider).themeColor.descColor(),
+                                          color: ref
+                                              .watch(themeProvider)
+                                              .themeColor
+                                              .descColor(),
                                         ),
                                       ),
                                       autofocus: false,
@@ -310,7 +328,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         hintText: "请输入client_id",
                                         hintStyle: TextStyle(
                                           fontSize: 16,
-                                          color: ref.watch(themeProvider).themeColor.descColor(),
+                                          color: ref
+                                              .watch(themeProvider)
+                                              .themeColor
+                                              .descColor(),
                                         ),
                                       ),
                                       autofocus: false,
@@ -354,7 +375,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         hintText: "请输入client_secret",
                                         hintStyle: TextStyle(
                                           fontSize: 16,
-                                          color: ref.watch(themeProvider).themeColor.descColor(),
+                                          color: ref
+                                              .watch(themeProvider)
+                                              .themeColor
+                                              .descColor(),
                                         ),
                                       ),
                                       autofocus: false,
@@ -399,7 +423,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       GestureDetector(
                         onTap: () {
                           cardKey.currentState?.toggleCard();
-                          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((timeStamp) {
                             setState(() {});
                           });
                         },
@@ -421,7 +446,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   height: 30,
                 ),
                 Shake(
-                  preferences: const AnimationPreferences(autoPlay: AnimationPlayStates.None),
+                  preferences: const AnimationPreferences(
+                      autoPlay: AnimationPlayStates.None),
                   key: loginKey,
                   child: Center(
                     child: Container(
@@ -469,9 +495,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   Http.pushedLoginPage = false;
                                   Utils.hideKeyBoard(context);
                                   if (loginByUserName()) {
-                                    login(_userNameController.text, _passwordController.text);
+                                    login(_userNameController.text,
+                                        _passwordController.text);
                                   } else {
-                                    login(_cIdController.text, _cSecretController.text);
+                                    login(_cIdController.text,
+                                        _cSecretController.text);
                                   }
                                 },
                               );
@@ -498,7 +526,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 onSelected: (UserInfoBean result) {
                                   selected(result);
                                 },
-                                itemBuilder: (BuildContext context) => <PopupMenuEntry<UserInfoBean>>[
+                                itemBuilder: (BuildContext context) =>
+                                    <PopupMenuEntry<UserInfoBean>>[
                                   ...getIt<UserInfoViewModel>()
                                       .historyAccounts
                                       .map(
@@ -554,7 +583,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     isLoading = true;
     setState(() {});
 
-    helper = LoginHelper(useSecretLogin, _hostController.text, userName, password, rememberPassword);
+    helper = LoginHelper(useSecretLogin, _hostController.text, userName,
+        password, rememberPassword);
     var response = await helper!.login();
     dealLoginResponse(response);
   }
@@ -581,9 +611,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     if (_hostController.text.isEmpty) return false;
     if (!loginByUserName()) {
-      return _cIdController.text.isNotEmpty && _cSecretController.text.isNotEmpty;
+      return _cIdController.text.isNotEmpty &&
+          _cSecretController.text.isNotEmpty;
     } else {
-      return _userNameController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+      return _userNameController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty;
     }
   }
 

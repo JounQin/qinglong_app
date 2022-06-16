@@ -29,9 +29,8 @@ class SourceCodeView extends StatefulWidget {
     this.syntaxHighlighterStyle,
   }) : super(key: key);
 
-  String? get codeLink => codeLinkPrefix == null
-      ? null
-      : '$codeLinkPrefix/$filePath';
+  String? get codeLink =>
+      codeLinkPrefix == null ? null : '$codeLinkPrefix/$filePath';
 
   @override
   _SourceCodeViewState createState() {

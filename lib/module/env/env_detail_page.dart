@@ -36,7 +36,8 @@ class _TaskDetailPageState extends ConsumerState<EnvDetailPage> {
           behavior: HitTestBehavior.opaque,
           onTap: () {
             Navigator.of(context).pop();
-            Navigator.of(context).pushNamed(Routes.routeAddEnv, arguments: widget.envBean);
+            Navigator.of(context)
+                .pushNamed(Routes.routeAddEnv, arguments: widget.envBean);
           },
           child: Container(
             padding: const EdgeInsets.symmetric(
@@ -225,7 +226,9 @@ class _TaskDetailPageState extends ConsumerState<EnvDetailPage> {
   }
 
   void enableTask() async {
-    await ref.read(envProvider).enableEnv(widget.envBean.sId!, widget.envBean.status!);
+    await ref
+        .read(envProvider)
+        .enableEnv(widget.envBean.sId!, widget.envBean.status!);
     setState(() {});
   }
 
@@ -322,14 +325,16 @@ class EnvDetailCell extends ConsumerWidget {
                             }
                           },
                           style: TextStyle(
-                            color: ref.watch(themeProvider).themeColor.descColor(),
+                            color:
+                                ref.watch(themeProvider).themeColor.descColor(),
                             fontSize: 14,
                           ),
                         ),
                       ),
                     )
                   : Expanded(
-                      child: Align(alignment: Alignment.centerRight, child: icon!),
+                      child:
+                          Align(alignment: Alignment.centerRight, child: icon!),
                     ),
             ],
           ),

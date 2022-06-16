@@ -23,7 +23,6 @@ class _AboutPageState extends ConsumerState<AboutPage> {
   void initState() {
     super.initState();
     getInfo();
-
   }
 
   @override
@@ -88,7 +87,8 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    _launchURL("https://github.com/qinglong-app/qinglong_app/releases");
+                    _launchURL(
+                        "https://github.com/qinglong-app/qinglong_app/releases");
                   },
                   child: Text(
                     "版本更新",

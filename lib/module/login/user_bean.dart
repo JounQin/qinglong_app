@@ -19,6 +19,7 @@ class UserBean {
     data['twoFactorActivated'] = this.twoFactorActivated;
     return data;
   }
+
   static UserBean jsonConversion(Map<String, dynamic> json) {
     return UserBean.fromJson(json);
   }

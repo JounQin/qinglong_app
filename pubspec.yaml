@@ -37,6 +37,7 @@ dependencies:
   share_plus: ^4.0.7
   flutter_animator: ^3.2.1
   modal_bottom_sheet: ^2.0.1
+  file_picker: ^4.6.1
   code_text_field:
     path: ./pub/code_field-master
 

@@ -122,7 +122,8 @@ class Http {
     if (!pushedLoginPage) {
       "身份已过期,请重新登录".toast();
       pushedLoginPage = true;
-      navigatorState.currentState?.pushNamedAndRemoveUntil(Routes.routeLogin, (route) => false);
+      navigatorState.currentState
+          ?.pushNamedAndRemoveUntil(Routes.routeLogin, (route) => false);
     }
   }
 
@@ -136,9 +137,15 @@ class Http {
     }
 
     if (e.response != null && e.response!.data != null) {
-      return HttpResponse(success: false, message: e.response?.data["message"] ?? e.message, code: e.response?.data["code"] ?? 0);
+      return HttpResponse(
+          success: false,
+          message: e.response?.data["message"] ?? e.message,
+          code: e.response?.data["code"] ?? 0);
     } else {
-      return HttpResponse(success: false, message: e.message, code: e.response?.statusCode ?? 0);
+      return HttpResponse(
+          success: false,
+          message: e.message,
+          code: e.response?.statusCode ?? 0);
     }
   }
 
@@ -223,7 +230,8 @@ class HttpResponse<T> {
   late int code;
   T? bean;
 
-  HttpResponse({required this.success, this.message, required this.code, this.bean});
+  HttpResponse(
+      {required this.success, this.message, required this.code, this.bean});
 }
 
 class DeserializeAction<T> {

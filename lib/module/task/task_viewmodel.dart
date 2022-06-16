@@ -62,7 +62,8 @@ class TaskViewModel extends BaseViewModel {
     }
 
     p.sort((TaskBean a, TaskBean b) {
-      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0)
+          .isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
       if (c == true) {
         return 1;
       }
@@ -75,7 +76,8 @@ class TaskViewModel extends BaseViewModel {
 
     p.sort((a, b) {
       if (a.status == 0 && b.status == 0) {
-        bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+        bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0)
+            .isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
         if (c == true) {
           return 1;
         }
@@ -86,7 +88,8 @@ class TaskViewModel extends BaseViewModel {
     });
 
     r.sort((a, b) {
-      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0)
+          .isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
       if (c == true) {
         return 1;
       }
@@ -94,7 +97,8 @@ class TaskViewModel extends BaseViewModel {
     });
 
     d.sort((a, b) {
-      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0)
+          .isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
       if (c == true) {
         return 1;
       }
@@ -102,7 +106,8 @@ class TaskViewModel extends BaseViewModel {
     });
 
     list.sort((a, b) {
-      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0).isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
+      bool c = DateTime.fromMillisecondsSinceEpoch(a.created ?? 0)
+          .isBefore(DateTime.fromMillisecondsSinceEpoch(b.created ?? 0));
       if (c == true) {
         return 1;
       }
@@ -116,9 +121,12 @@ class TaskViewModel extends BaseViewModel {
     running.clear();
     running.addAll(list.where((element) => element.status == 0));
     neverRunning.clear();
-    neverRunning.addAll(list.where((element) => element.lastRunningTime == null));
+    neverRunning
+        .addAll(list.where((element) => element.lastRunningTime == null));
     notScripts.clear();
-    notScripts.addAll(list.where((element) => (element.command != null && (element.command!.startsWith("ql repo") || element.command!.startsWith("ql raw")))));
+    notScripts.addAll(list.where((element) => (element.command != null &&
+        (element.command!.startsWith("ql repo") ||
+            element.command!.startsWith("ql raw")))));
     disabled.clear();
     disabled.addAll(list.where((element) => element.isDisabled == 1));
   }

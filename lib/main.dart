@@ -41,7 +41,8 @@ void main() async {
     ),
   );
   if (Platform.isAndroid) {
-    SystemUiOverlayStyle style = const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemUiOverlayStyle style =
+        const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(style);
   }
 }
@@ -62,7 +63,8 @@ class QlAppState extends ConsumerState<QlApp> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: MediaQuery(
-        data: MediaQueryData.fromWindow(WidgetsBinding.instance.window).copyWith(
+        data:
+            MediaQueryData.fromWindow(WidgetsBinding.instance.window).copyWith(
           textScaleFactor: 1,
         ),
         child: MaterialApp(
@@ -87,7 +89,9 @@ class QlAppState extends ConsumerState<QlApp> {
               if (!kReleaseMode) {
                 showDebugBtn(context);
               }
-              return getIt<UserInfoViewModel>().isLogined() ? const HomePage() : const LoginPage();
+              return getIt<UserInfoViewModel>().isLogined()
+                  ? const HomePage()
+                  : const LoginPage();
             },
           ),
           // home: LoginPage(),

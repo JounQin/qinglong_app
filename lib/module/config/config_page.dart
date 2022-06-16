@@ -24,7 +24,8 @@ class ConfigPage extends StatefulWidget {
   ConfigPageState createState() => ConfigPageState();
 }
 
-class ConfigPageState extends State<ConfigPage> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class ConfigPageState extends State<ConfigPage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   int _initIndex = 0;
   BuildContext? childContext;
 
@@ -89,8 +90,14 @@ class ConfigPageState extends State<ConfigPage> with SingleTickerProviderStateMi
   void editMe(WidgetRef ref) {
     if (childContext == null) return;
     navigatorState.currentState?.pushNamed(Routes.routeConfigEdit, arguments: {
-      "title": ref.read(configProvider).list[DefaultTabController.of(childContext!)?.index ?? 0].title,
-      "content": ref.read(configProvider).content[ref.read(configProvider).list[DefaultTabController.of(childContext!)?.index ?? 0].title]
+      "title": ref
+          .read(configProvider)
+          .list[DefaultTabController.of(childContext!)?.index ?? 0]
+          .title,
+      "content": ref.read(configProvider).content[ref
+          .read(configProvider)
+          .list[DefaultTabController.of(childContext!)?.index ?? 0]
+          .title]
     }).then((value) async {
       if (value != null && (value as String).isNotEmpty) {
         await ref.read(configProvider).loadContent(value);
@@ -115,7 +122,8 @@ class CodeWidget extends ConsumerStatefulWidget {
   ConsumerState<CodeWidget> createState() => _CodeWidgetState();
 }
 
-class _CodeWidgetState extends ConsumerState<CodeWidget> with AutomaticKeepAliveClientMixin {
+class _CodeWidgetState extends ConsumerState<CodeWidget>
+    with AutomaticKeepAliveClientMixin {
   CodeController? _codeController;
 
   @override
@@ -143,7 +151,8 @@ class _CodeWidgetState extends ConsumerState<CodeWidget> with AutomaticKeepAlive
       },
       theme: ref.watch(themeProvider).themeColor.codeEditorTheme(),
       stringMap: {
-        "export": const TextStyle(fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
+        "export": const TextStyle(
+            fontWeight: FontWeight.normal, color: Color(0xff6B2375)),
       },
     );
     return SafeArea(

@@ -71,7 +71,8 @@ class Routes {
           return MaterialPageRoute(builder: (context) => const AddTaskPage());
         }
       case routeAddDependency:
-        return MaterialPageRoute(builder: (context) => const AddDependencyPage());
+        return MaterialPageRoute(
+            builder: (context) => const AddDependencyPage());
       case routeAddEnv:
         if (settings.arguments != null) {
           return MaterialPageRoute(

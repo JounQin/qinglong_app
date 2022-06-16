@@ -89,21 +89,24 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> startTasks(List<String> crons) async {
+  static Future<HttpResponse<NullResponse>> startTasks(
+      List<String> crons) async {
     return await Http.put<NullResponse>(
       Url.runTasks,
       crons,
     );
   }
 
-  static Future<HttpResponse<NullResponse>> stopTasks(List<String> crons) async {
+  static Future<HttpResponse<NullResponse>> stopTasks(
+      List<String> crons) async {
     return await Http.put<NullResponse>(
       Url.stopTasks,
       crons,
     );
   }
 
-  static Future<HttpResponse<NullResponse>> updatePassword(String name, String password) async {
+  static Future<HttpResponse<NullResponse>> updatePassword(
+      String name, String password) async {
     return await Http.put<NullResponse>(
       Url.updatePassword,
       {
@@ -127,7 +130,11 @@ class Api {
     int? id,
     String? nId,
   }) async {
-    var data = <String, dynamic>{"name": name, "command": command, "schedule": cron};
+    var data = <String, dynamic>{
+      "name": name,
+      "command": command,
+      "schedule": cron
+    };
 
     if (id != null || nId != null) {
       if (id != null) {
@@ -195,7 +202,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> saveFile(String name, String content) async {
+  static Future<HttpResponse<NullResponse>> saveFile(
+      String name, String content) async {
     return await Http.post<NullResponse>(
       Url.saveFile,
       {"content": content, "name": name},
@@ -260,7 +268,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> moveEnv(String id, int fromIndex, int toIndex) async {
+  static Future<HttpResponse<NullResponse>> moveEnv(
+      String id, int fromIndex, int toIndex) async {
     return await Http.put<NullResponse>(
       Url.envMove(id),
       {"fromIndex": fromIndex, "toIndex": toIndex},
@@ -275,10 +284,12 @@ class Api {
   }
 
   static Future<HttpResponse<List<TaskLogBean>>> taskLog() async {
-    return await Http.get<List<TaskLogBean>>(Url.taskLog, null, serializationName: Utils.isUpperVersion2_12_2() ? "data" : "dirs");
+    return await Http.get<List<TaskLogBean>>(Url.taskLog, null,
+        serializationName: Utils.isUpperVersion2_12_2() ? "data" : "dirs");
   }
 
-  static Future<HttpResponse<String>> taskLogDetail(String name, String path) async {
+  static Future<HttpResponse<String>> taskLogDetail(
+      String name, String path) async {
     if (Utils.isUpperVersion2_13_0()) {
       return await Http.get<String>(
         Url.taskLogDetail + name + "?path=" + path,
@@ -300,7 +311,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> updateScript(String name, String path, String content) async {
+  static Future<HttpResponse<NullResponse>> updateScript(
+      String name, String path, String content) async {
     return await Http.put<NullResponse>(
       Url.scriptDetail,
       {
@@ -311,7 +323,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> delScript(String name, String path) async {
+  static Future<HttpResponse<NullResponse>> delScript(
+      String name, String path) async {
     return await Http.delete<NullResponse>(
       Url.scriptDetail,
       {
@@ -321,7 +334,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<String>> scriptDetail(String name, String? path) async {
+  static Future<HttpResponse<String>> scriptDetail(
+      String name, String? path) async {
     return await Http.get<String>(
       Url.scriptDetail + name,
       {
@@ -330,7 +344,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<List<DependencyBean>>> dependencies(String type) async {
+  static Future<HttpResponse<List<DependencyBean>>> dependencies(
+      String type) async {
     return await Http.get<List<DependencyBean>>(
       Url.dependencies,
       {
@@ -339,7 +354,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> dependencyReinstall(String id) async {
+  static Future<HttpResponse<NullResponse>> dependencyReinstall(
+      String id) async {
     return await Http.put<NullResponse>(
       Url.dependencies,
       [id],
@@ -353,7 +369,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> addDependency(String name, int type) async {
+  static Future<HttpResponse<NullResponse>> addDependency(
+      String name, int type) async {
     return await Http.post<NullResponse>(
       Url.dependencies,
       [
@@ -365,7 +382,8 @@ class Api {
     );
   }
 
-  static Future<HttpResponse<NullResponse>> addScript(String name, String path, String content) async {
+  static Future<HttpResponse<NullResponse>> addScript(
+      String name, String path, String content) async {
     return await Http.post<NullResponse>(
       Url.addScript,
       {
