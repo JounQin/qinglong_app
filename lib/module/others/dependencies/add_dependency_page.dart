@@ -129,6 +129,8 @@ class _AddDependencyPageState extends ConsumerState<AddDependencyPage> {
                 ),
                 TextField(
                   controller: _nameController,
+                  maxLines: 10,
+                  minLines: 1,
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(0, 5, 0, 5),
                     hintText: "请输入名称",
@@ -149,10 +151,18 @@ class _AddDependencyPageState extends ConsumerState<AddDependencyPage> {
       return;
     }
 
-    HttpResponse<NullResponse> response = await Api.addDependency(
-      _nameController.text,
-      depedencyType.index,
-    );
+    List<Map<String, dynamic>> list = [];
+
+    List<String> names = _nameController.text.split("\n");
+    list.addAll(names
+        .map(
+          (e) => {
+            "name": e,
+            "type": depedencyType.index,
+          },
+        )
+        .toList());
+    HttpResponse<NullResponse> response = await Api.addDependency(list);
 
     if (response.success) {
       "新增成功".toast();
